@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "products": "Products",
+    "pricing": "Price",
+    "materials": "Materials"
+  },
+  "home": {
+    "title": "Registered products",
+    "searchPlaceholder": "Search product",
+    "empty": "No products found",
+    "finalPrice": "Final price"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "language": "Language"
+  },
+  "pricing": {
+    "title": "Price",
+    "comingSoon": "Feature under development.\nSoon you will be able to calculate the ideal price for your products."
+  },
+  "materials": {
+    "title": "Materials",
+    "unit": "Unit",
+    "cost": "Cost"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "products": "Produtos",
+    "pricing": "Precificar",
+    "materials": "Materiais"
+  },
+  "home": {
+    "title": "Produtos cadastrados",
+    "searchPlaceholder": "Buscar produto",
+    "empty": "Nenhum produto encontrado",
+    "finalPrice": "Valor final"
+  },
+  "settings": {
+    "title": "Configurações",
+    "theme": "Tema",
+    "light": "Claro",
+    "dark": "Escuro",
+    "language": "Idioma"
+  },
+  "pricing": {
+    "title": "Precificar",
+    "comingSoon": "Funcionalidade em desenvolvimento.\nEm breve você poderá calcular o preço ideal para seus produtos."
+  },
+  "materials": {
+    "title": "Materiais",
+    "unit": "Unidade",
+    "cost": "Custo"
+  }
+}

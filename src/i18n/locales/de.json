@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "products": "Produkte",
+    "pricing": "Preis berechnen",
+    "materials": "Materialien"
+  },
+  "home": {
+    "title": "Registrierte Produkte",
+    "searchPlaceholder": "Produkt suchen",
+    "empty": "Keine Produkte gefunden",
+    "finalPrice": "Endpreis"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "theme": "Design",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "language": "Sprache"
+  },
+  "pricing": {
+    "title": "Preis berechnen",
+    "comingSoon": "Funktion in Entwicklung.\nBald können Sie den idealen Preis für Ihre Produkte berechnen."
+  },
+  "materials": {
+    "title": "Materialien",
+    "unit": "Einheit",
+    "cost": "Kosten"
+  }
+}

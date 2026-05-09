@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "products": "Productos",
+    "pricing": "Cotizar",
+    "materials": "Materiales"
+  },
+  "home": {
+    "title": "Productos registrados",
+    "searchPlaceholder": "Buscar producto",
+    "empty": "No se encontraron productos",
+    "finalPrice": "Precio final"
+  },
+  "settings": {
+    "title": "Configuración",
+    "theme": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "language": "Idioma"
+  },
+  "pricing": {
+    "title": "Cotizar",
+    "comingSoon": "Funcionalidad en desarrollo.\nPronto podrás calcular el precio ideal para tus productos."
+  },
+  "materials": {
+    "title": "Materiales",
+    "unit": "Unidad",
+    "cost": "Costo"
+  }
+}
