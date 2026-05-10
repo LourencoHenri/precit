@@ -1,6 +1,15 @@
 export type Material = {
   id: string;
   name: string;
-  unit: string;
-  cost: number;
+  category?: string;
+  purchaseUnit: string;
+  purchaseQuantity: number;
+  purchasePrice: number;
+  unitCost: number;
+  currentStock?: number;
+  minimumStock?: number;
+  supplier?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
 };

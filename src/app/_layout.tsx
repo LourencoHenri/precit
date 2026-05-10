@@ -45,6 +45,10 @@ export default function RootLayout() {
             name="modal"
             options={{ presentation: 'modal', title: t('settings.title') }}
           />
+          <Stack.Screen
+            name="new-material"
+            options={{ title: t('materials.newMaterial') }}
+          />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

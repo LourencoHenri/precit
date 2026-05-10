@@ -22,6 +22,7 @@ const MAPPING = {
   'tag.fill': 'local-offer',
   'cube.fill': 'category',
   'gearshape.fill': 'settings',
+  'plus': 'add',
 } as IconMapping;
 
 /**

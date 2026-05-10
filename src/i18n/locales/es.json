@@ -23,7 +23,25 @@
   },
   "materials": {
     "title": "Materiales",
-    "unit": "Unidad",
-    "cost": "Costo"
+    "searchPlaceholder": "Buscar material",
+    "empty": "No se encontraron materiales",
+    "newMaterial": "Nuevo material",
+    "name": "Nombre del material",
+    "category": "Categoría",
+    "purchaseUnit": "Unidad de compra",
+    "purchaseQuantity": "Cantidad comprada",
+    "purchasePrice": "Precio pagado (R$)",
+    "unitCost": "Costo por unidad",
+    "currentStock": "Stock actual",
+    "minimumStock": "Stock mínimo",
+    "supplier": "Proveedor / lugar de compra",
+    "notes": "Observaciones",
+    "save": "Guardar material",
+    "saveSuccess": "Material guardado con éxito",
+    "requiredFields": "Complete los campos obligatorios",
+    "invalidValue": "Valor inválido",
+    "perUnit": "por {{unit}}",
+    "optional": "opcional",
+    "required": "obligatorio"
   }
 }
