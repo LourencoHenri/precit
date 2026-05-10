@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -13,39 +13,21 @@ export default function PricingScreen() {
   const iconColor = useThemeColor({}, 'icon');
 
   return (
-    <ThemedView style={[styles.container, { paddingTop: insets.top }]}>
-      <View style={styles.content}>
-        <IconSymbol name="tag.fill" size={64} color={iconColor} style={styles.icon} />
-        <ThemedText type="title" style={styles.title}>
+    <ThemedView className="flex-1" style={{ paddingTop: insets.top }}>
+      <View className="flex-1 items-center justify-center px-10 gap-4">
+        <IconSymbol
+          name="tag.fill"
+          size={64}
+          color={iconColor}
+          style={{ opacity: 0.4, marginBottom: 8 }}
+        />
+        <ThemedText type="title" className="text-center">
           {t('pricing.title')}
         </ThemedText>
-        <ThemedText style={styles.description}>{t('pricing.comingSoon')}</ThemedText>
+        <ThemedText className="text-center opacity-60 leading-[22px]">
+          {t('pricing.comingSoon')}
+        </ThemedText>
       </View>
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 40,
-    gap: 16,
-  },
-  icon: {
-    opacity: 0.4,
-    marginBottom: 8,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  description: {
-    textAlign: 'center',
-    opacity: 0.6,
-    lineHeight: 22,
-  },
-});
