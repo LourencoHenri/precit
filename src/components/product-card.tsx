@@ -32,12 +32,14 @@ export function ProductCard({ product, priceLabel }: Props) {
         <ThemedText type="defaultSemiBold" numberOfLines={1}>
           {product.name}
         </ThemedText>
-        <ThemedText
-          className="text-[13px] leading-[18px] text-[#687076] dark:text-[#9ba1a6]"
-          numberOfLines={2}
-        >
-          {product.description}
-        </ThemedText>
+        {product.description ? (
+          <ThemedText
+            className="text-[13px] leading-[18px] text-[#687076] dark:text-[#9ba1a6]"
+            numberOfLines={2}
+          >
+            {product.description}
+          </ThemedText>
+        ) : null}
         <View className="flex-row items-center gap-1.5 mt-1">
           <ThemedText className="text-xs text-[#687076] dark:text-[#9ba1a6]">
             {priceLabel}

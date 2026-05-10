@@ -49,6 +49,10 @@ export default function RootLayout() {
             name="new-material"
             options={{ title: t('materials.newMaterial') }}
           />
+          <Stack.Screen
+            name="new-product"
+            options={{ title: t('pricing.newProduct') }}
+          />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
