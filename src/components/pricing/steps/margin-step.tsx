@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { TextInput, View } from 'react-native';
+import { View } from 'react-native';
 
+import { Input } from '@/components/ui/Input';
 import { ThemedText } from '@/components/themed-text';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import { ErrorField, FormState } from '@/types/pricing-form';
 import { FormField } from '../form-helpers';
 
@@ -16,12 +16,7 @@ type Props = {
 
 export function MarginStep({ form, set, errors, profitPct, totalFeesPercent }: Props) {
   const { t } = useTranslation();
-  const inputBg = useThemeColor({ light: '#f3f4f6', dark: '#2d3133' }, 'background');
-  const inputText = useThemeColor({}, 'text');
-  const placeholderColor = useThemeColor({ light: '#9ca3af', dark: '#6b7280' }, 'icon');
 
-  const inputStyle = { backgroundColor: inputBg, color: inputText } as const;
-  const fieldStyle = [inputStyle, { borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16 }] as const;
   const hasMarginError = errors.has('margin') || (profitPct > 0 && profitPct + totalFeesPercent >= 100);
 
   return (
@@ -55,14 +50,12 @@ export function MarginStep({ form, set, errors, profitPct, totalFeesPercent }: P
         error={hasMarginError}
         errorText={t('pricing.invalidMargin')}
       >
-        <TextInput
-          style={[fieldStyle, hasMarginError ? { borderWidth: 1.5 } : {}]}
-          className={hasMarginError ? 'border-red-400 dark:border-red-500' : ''}
+        <Input
           placeholder="0"
-          placeholderTextColor={placeholderColor}
           value={form.desiredProfitPercent}
           onChangeText={(v) => set('desiredProfitPercent', v)}
           keyboardType="decimal-pad"
+          wrapperStyle={hasMarginError ? { borderColor: '#E5484D', borderWidth: 1.5 } : undefined}
         />
       </FormField>
 
@@ -77,14 +70,13 @@ export function MarginStep({ form, set, errors, profitPct, totalFeesPercent }: P
 
       {/* Profit value */}
       <FormField label={t('pricing.desiredProfitValue')} optional={t('pricing.optional')}>
-        <TextInput
-          style={[fieldStyle, profitPct > 0 ? { opacity: 0.4 } : {}]}
+        <Input
           placeholder="0,00"
-          placeholderTextColor={placeholderColor}
           value={form.desiredProfitValue}
           onChangeText={(v) => set('desiredProfitValue', v)}
           keyboardType="decimal-pad"
           editable={profitPct === 0}
+          wrapperStyle={profitPct > 0 ? { opacity: 0.4 } : undefined}
         />
       </FormField>
 

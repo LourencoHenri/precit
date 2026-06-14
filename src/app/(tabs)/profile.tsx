@@ -1,4 +1,4 @@
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from "expo-router";
 import {
   Camera,
   ChevronRight,
@@ -9,20 +9,27 @@ import {
   Settings,
   Trash2,
   User,
-} from 'lucide-react-native';
-import { useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+} from "lucide-react-native";
+import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
-import { AppHeader } from '@/components/app-header';
-import { ThemedView } from '@/components/themed-view';
-import { COLORS } from '@/constants/design';
-import { useProfile } from '@/hooks/use-profile';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { AppHeader } from "@/components/app-header";
+import { Input } from "@/components/ui/Input";
+import { ThemedView } from "@/components/themed-view";
+import { COLORS } from "@/constants/design";
+import { useProfile } from "@/hooks/use-profile";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 function getInitials(name: string): string {
-  const parts = name.trim().split(' ').filter(Boolean);
-  if (parts.length === 0) return '?';
+  const parts = name.trim().split(" ").filter(Boolean);
+  if (parts.length === 0) return "?";
   if (parts.length === 1) return parts[0][0].toUpperCase();
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
@@ -32,7 +39,7 @@ function SectionHeader({ label }: { label: string }) {
     <Text
       style={{
         fontSize: 11,
-        fontWeight: '600',
+        fontWeight: "600",
         letterSpacing: 0.8,
         color: COLORS.textSecondary,
         marginHorizontal: 20,
@@ -72,8 +79,8 @@ function ActionRow({
     <Pressable
       onPress={onPress}
       style={({ pressed }) => ({
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
         paddingHorizontal: 16,
         paddingVertical: 14,
         gap: 12,
@@ -83,12 +90,12 @@ function ActionRow({
         borderBottomColor: dividerColor,
       })}
     >
-      <View style={{ width: 24, alignItems: 'center' }}>{icon}</View>
+      <View style={{ width: 24, alignItems: "center" }}>{icon}</View>
       <Text
         style={{
           flex: 1,
           fontSize: 15,
-          color: destructive ? '#ef4444' : textColor,
+          color: destructive ? "#ef4444" : textColor,
         }}
       >
         {label}
@@ -102,7 +109,13 @@ function ActionRow({
             paddingVertical: 2,
           }}
         >
-          <Text style={{ fontSize: 11, color: COLORS.textSecondary, fontWeight: '500' }}>
+          <Text
+            style={{
+              fontSize: 11,
+              color: COLORS.textSecondary,
+              fontWeight: "500",
+            }}
+          >
             {badge}
           </Text>
         </View>
@@ -118,13 +131,18 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { profile, refresh, update } = useProfile();
   const [isEditing, setIsEditing] = useState(false);
-  const [editName, setEditName] = useState('');
-  const [editEmail, setEditEmail] = useState('');
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
 
-  const cardBg = useThemeColor({ light: COLORS.surface, dark: '#1e2122' }, 'text');
-  const inputBg = useThemeColor({ light: COLORS.surfaceVariant, dark: '#2a2a2e' }, 'text');
-  const textColor = useThemeColor({}, 'text');
-  const dividerColor = useThemeColor({ light: COLORS.outlineVariant, dark: '#2d3133' }, 'text');
+  const cardBg = useThemeColor(
+    { light: COLORS.surface, dark: "#1e2122" },
+    "text",
+  );
+  const textColor = useThemeColor({}, "text");
+  const dividerColor = useThemeColor(
+    { light: COLORS.outlineVariant, dark: "#2d3133" },
+    "text",
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -146,11 +164,11 @@ export default function ProfileScreen() {
   };
 
   const handleLogout = () => {
-    Alert.alert(t('profile.confirmLogout'), t('profile.confirmLogoutMessage'), [
-      { text: t('profile.cancel'), style: 'cancel' },
+    Alert.alert(t("profile.confirmLogout"), t("profile.confirmLogoutMessage"), [
+      { text: t("profile.cancel"), style: "cancel" },
       {
-        text: t('profile.logout'),
-        style: 'destructive',
+        text: t("profile.logout"),
+        style: "destructive",
         onPress: () => {
           // TODO: clear auth session when auth is implemented
         },
@@ -159,13 +177,13 @@ export default function ProfileScreen() {
   };
 
   const comingSoon = () =>
-    Alert.alert(t('profile.comingSoon'), '', [{ text: 'OK', style: 'cancel' }]);
+    Alert.alert(t("profile.comingSoon"), "", [{ text: "OK", style: "cancel" }]);
 
   const rowProps = { cardBg, dividerColor, textColor };
 
   return (
     <ThemedView style={{ flex: 1 }}>
-      <AppHeader title={t('nav.profile')} />
+      <AppHeader title={t("nav.profile")} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 40 }}
@@ -173,7 +191,7 @@ export default function ProfileScreen() {
         {/* Avatar + user info */}
         <View
           style={{
-            alignItems: 'center',
+            alignItems: "center",
             paddingTop: 32,
             paddingBottom: 8,
             paddingHorizontal: 24,
@@ -185,13 +203,19 @@ export default function ProfileScreen() {
               height: 88,
               borderRadius: 44,
               backgroundColor: COLORS.primaryContainer,
-              alignItems: 'center',
-              justifyContent: 'center',
+              alignItems: "center",
+              justifyContent: "center",
               marginBottom: 14,
             }}
           >
             {profile.name ? (
-              <Text style={{ fontSize: 32, fontWeight: '700', color: COLORS.primary }}>
+              <Text
+                style={{
+                  fontSize: 32,
+                  fontWeight: "700",
+                  color: COLORS.primary,
+                }}
+              >
                 {getInitials(profile.name)}
               </Text>
             ) : (
@@ -200,40 +224,22 @@ export default function ProfileScreen() {
           </View>
 
           {isEditing ? (
-            <View style={{ width: '100%', gap: 10 }}>
-              <TextInput
+            <View style={{ width: "100%", gap: 10 }}>
+              <Input
                 value={editName}
                 onChangeText={setEditName}
-                placeholder={t('profile.namePlaceholder')}
-                placeholderTextColor={COLORS.textSecondary}
-                style={{
-                  backgroundColor: inputBg,
-                  borderRadius: 12,
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
-                  fontSize: 15,
-                  color: textColor,
-                  textAlign: 'center',
-                }}
+                placeholder={t("profile.namePlaceholder")}
+                style={{ textAlign: "center", fontSize: 15 }}
               />
-              <TextInput
+              <Input
                 value={editEmail}
                 onChangeText={setEditEmail}
-                placeholder={t('profile.emailPlaceholder')}
-                placeholderTextColor={COLORS.textSecondary}
+                placeholder={t("profile.emailPlaceholder")}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                style={{
-                  backgroundColor: inputBg,
-                  borderRadius: 12,
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
-                  fontSize: 15,
-                  color: textColor,
-                  textAlign: 'center',
-                }}
+                style={{ textAlign: "center", fontSize: 15 }}
               />
-              <View style={{ flexDirection: 'row', gap: 10, marginTop: 4 }}>
+              <View style={{ flexDirection: "row", gap: 10, marginTop: 4 }}>
                 <Pressable
                   onPress={cancelEdit}
                   style={{
@@ -242,14 +248,18 @@ export default function ProfileScreen() {
                     borderRadius: 12,
                     borderWidth: 1.5,
                     borderColor: COLORS.outline,
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   <Text
-                    style={{ fontSize: 14, fontWeight: '600', color: COLORS.onSurfaceVariant }}
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "600",
+                      color: COLORS.onSurfaceVariant,
+                    }}
                   >
-                    {t('profile.cancel')}
+                    {t("profile.cancel")}
                   </Text>
                 </Pressable>
                 <Pressable
@@ -259,12 +269,14 @@ export default function ProfileScreen() {
                     height: 44,
                     borderRadius: 12,
                     backgroundColor: COLORS.primary,
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
-                  <Text style={{ fontSize: 14, fontWeight: '600', color: 'white' }}>
-                    {t('profile.save')}
+                  <Text
+                    style={{ fontSize: 14, fontWeight: "600", color: "white" }}
+                  >
+                    {t("profile.save")}
                   </Text>
                 </Pressable>
               </View>
@@ -272,13 +284,22 @@ export default function ProfileScreen() {
           ) : (
             <>
               <Text
-                style={{ fontSize: 22, fontWeight: '700', color: textColor, marginBottom: 4 }}
+                style={{
+                  fontSize: 22,
+                  fontWeight: "700",
+                  color: textColor,
+                  marginBottom: 4,
+                }}
               >
-                {profile.name || t('profile.guestName')}
+                {profile.name || t("profile.guestName")}
               </Text>
               {profile.email ? (
                 <Text
-                  style={{ fontSize: 14, color: COLORS.textSecondary, marginBottom: 14 }}
+                  style={{
+                    fontSize: 14,
+                    color: COLORS.textSecondary,
+                    marginBottom: 14,
+                  }}
                 >
                   {profile.email}
                 </Text>
@@ -288,8 +309,8 @@ export default function ProfileScreen() {
               <Pressable
                 onPress={startEdit}
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
                   gap: 6,
                   backgroundColor: COLORS.primaryContainer,
                   paddingHorizontal: 16,
@@ -298,8 +319,14 @@ export default function ProfileScreen() {
                 }}
               >
                 <Pencil size={14} color={COLORS.primary} strokeWidth={2} />
-                <Text style={{ fontSize: 13, fontWeight: '600', color: COLORS.primary }}>
-                  {t('profile.editProfile')}
+                <Text
+                  style={{
+                    fontSize: 13,
+                    fontWeight: "600",
+                    color: COLORS.primary,
+                  }}
+                >
+                  {t("profile.editProfile")}
                 </Text>
               </Pressable>
             </>
@@ -307,60 +334,90 @@ export default function ProfileScreen() {
         </View>
 
         {/* Conta */}
-        <SectionHeader label={t('profile.account')} />
-        <View style={{ marginHorizontal: 16, borderRadius: 16, overflow: 'hidden' }}>
+        <SectionHeader label={t("profile.account")} />
+        <View
+          style={{ marginHorizontal: 16, borderRadius: 16, overflow: "hidden" }}
+        >
           <ActionRow
             {...rowProps}
-            icon={<Camera size={20} color={COLORS.onSurfaceVariant} strokeWidth={1.75} />}
-            label={t('profile.changePhoto')}
+            icon={
+              <Camera
+                size={20}
+                color={COLORS.onSurfaceVariant}
+                strokeWidth={1.75}
+              />
+            }
+            label={t("profile.changePhoto")}
             onPress={comingSoon}
-            badge={t('profile.comingSoon')}
+            badge={t("profile.comingSoon")}
           />
           <ActionRow
             {...rowProps}
-            icon={<Lock size={20} color={COLORS.onSurfaceVariant} strokeWidth={1.75} />}
-            label={t('profile.changePassword')}
+            icon={
+              <Lock
+                size={20}
+                color={COLORS.onSurfaceVariant}
+                strokeWidth={1.75}
+              />
+            }
+            label={t("profile.changePassword")}
             onPress={comingSoon}
-            badge={t('profile.comingSoon')}
+            badge={t("profile.comingSoon")}
           />
           <ActionRow
             {...rowProps}
-            icon={<CreditCard size={20} color={COLORS.onSurfaceVariant} strokeWidth={1.75} />}
-            label={t('profile.subscription')}
+            icon={
+              <CreditCard
+                size={20}
+                color={COLORS.onSurfaceVariant}
+                strokeWidth={1.75}
+              />
+            }
+            label={t("profile.subscription")}
             onPress={comingSoon}
-            badge={t('profile.comingSoon')}
+            badge={t("profile.comingSoon")}
             last
           />
         </View>
 
         {/* Preferências */}
-        <SectionHeader label={t('profile.preferences')} />
-        <View style={{ marginHorizontal: 16, borderRadius: 16, overflow: 'hidden' }}>
+        <SectionHeader label={t("profile.preferences")} />
+        <View
+          style={{ marginHorizontal: 16, borderRadius: 16, overflow: "hidden" }}
+        >
           <ActionRow
             {...rowProps}
-            icon={<Settings size={20} color={COLORS.onSurfaceVariant} strokeWidth={1.75} />}
-            label={t('profile.openSettings')}
-            onPress={() => router.push('/settings')}
+            icon={
+              <Settings
+                size={20}
+                color={COLORS.onSurfaceVariant}
+                strokeWidth={1.75}
+              />
+            }
+            label={t("profile.openSettings")}
+            onPress={() => router.push("/settings")}
             last
           />
         </View>
 
         {/* Zona de perigo */}
-        <SectionHeader label={t('profile.dangerZone')} />
-        <View style={{ marginHorizontal: 16, borderRadius: 16, overflow: 'hidden' }}>
+        <SectionHeader label={t("profile.dangerZone")} />
+        <View
+          style={{ marginHorizontal: 16, borderRadius: 16, overflow: "hidden" }}
+        >
           <ActionRow
             {...rowProps}
             icon={<LogOut size={20} color="#ef4444" strokeWidth={1.75} />}
-            label={t('profile.logout')}
+            label={t("profile.logout")}
             onPress={handleLogout}
             destructive
           />
           <ActionRow
             {...rowProps}
             icon={<Trash2 size={20} color="#ef4444" strokeWidth={1.75} />}
-            label={t('profile.deleteAccount')}
+            label={t("profile.deleteAccount")}
             onPress={comingSoon}
-            badge={t('profile.comingSoon')}
+            badge={t("profile.comingSoon")}
             destructive
             last
           />

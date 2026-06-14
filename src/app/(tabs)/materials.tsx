@@ -1,25 +1,28 @@
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, ActivityIndicator, FlatList, Pressable, TextInput, View } from 'react-native';
+import { Alert, ActivityIndicator, FlatList, Pressable, View } from 'react-native';
+import { Search } from 'lucide-react-native';
 
 import { AppHeader } from '@/components/app-header';
 import { MaterialCard } from '@/components/material-card';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Input } from '@/components/ui/Input';
 import { deleteMaterial } from '@/data/material-storage';
 import { useMaterials } from '@/hooks/use-materials';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import { Material } from '@/types/material';
 
 const PRIMARY = '#6750A4';
-const SURFACE = '#FEF7FF';
 const INACTIVE = '#49454F';
 
 export default function MaterialsScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const searchBg = useThemeColor({ light: '#FEF7FF', dark: '#1e2122' }, 'background');
   const { materials, loading, refresh } = useMaterials();
 
   useFocusEffect(
@@ -85,29 +88,15 @@ export default function MaterialsScreen() {
           gap: 8,
         }}
       >
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: SURFACE,
-            borderRadius: 4,
-            paddingLeft: 8,
-            paddingRight: 16,
-            height: 56,
-          }}
-        >
-          <View style={{ width: 40, height: 48, alignItems: 'center', justifyContent: 'center' }}>
-            <IconSymbol name="search" size={22} color={INACTIVE} />
-          </View>
-          <TextInput
-            style={{ flex: 1, fontSize: 16, color: '#1D1B20', letterSpacing: 0.5, padding: 0 }}
+        <View style={{ flex: 1 }}>
+          <Input
+            leftIcon={<Search size={20} color={INACTIVE} />}
             placeholder={t('materials.searchPlaceholder')}
-            placeholderTextColor={INACTIVE}
             value={search}
             onChangeText={setSearch}
             returnKeyType="search"
             clearButtonMode="while-editing"
+            wrapperStyle={{ backgroundColor: searchBg, borderWidth: 0, height: 52, borderRadius: 12 }}
           />
         </View>
         <Pressable

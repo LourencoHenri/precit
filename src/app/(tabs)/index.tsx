@@ -1,24 +1,29 @@
 import { useFocusEffect, useRouter } from "expo-router";
+import { Search } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, FlatList, TextInput, View } from "react-native";
+import { Alert, FlatList, View } from "react-native";
 
 import { AppHeader } from "@/components/app-header";
 import { ProductCard } from "@/components/product-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { IconSymbol } from "@/components/ui/icon-symbol";
+import { Input } from "@/components/ui/Input";
 import { deleteProduct } from "@/data/product-storage";
 import { useProducts } from "@/hooks/use-products";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { Product } from "@/types/product";
 
-const SURFACE = "#FEF7FF";
 const INACTIVE = "#49454F";
 
 export default function ProductsScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const [search, setSearch] = useState("");
+  const searchBg = useThemeColor(
+    { light: "#FEF7FF", dark: "#1e2122" },
+    "background",
+  );
   const { products, refresh } = useProducts();
 
   useFocusEffect(
@@ -75,43 +80,20 @@ export default function ProductsScreen() {
       <AppHeader title={t("nav.products")} />
 
       <View style={{ paddingTop: 8, paddingHorizontal: 16, paddingBottom: 10 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: SURFACE,
-            borderRadius: 4,
-            paddingLeft: 8,
-            paddingRight: 16,
-            height: 56,
+        <Input
+          leftIcon={<Search size={20} color={INACTIVE} />}
+          placeholder={t("home.searchPlaceholder")}
+          value={search}
+          onChangeText={setSearch}
+          returnKeyType="search"
+          clearButtonMode="while-editing"
+          wrapperStyle={{
+            backgroundColor: searchBg,
+            borderWidth: 0,
+            height: 52,
+            borderRadius: 12,
           }}
-        >
-          <View
-            style={{
-              width: 40,
-              height: 48,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <IconSymbol name="search" size={22} color={INACTIVE} />
-          </View>
-          <TextInput
-            style={{
-              flex: 1,
-              fontSize: 16,
-              color: "#1D1B20",
-              letterSpacing: 0.5,
-              padding: 0,
-            }}
-            placeholder={t("home.searchPlaceholder")}
-            placeholderTextColor={INACTIVE}
-            value={search}
-            onChangeText={setSearch}
-            returnKeyType="search"
-            clearButtonMode="while-editing"
-          />
-        </View>
+        />
       </View>
 
       <FlatList

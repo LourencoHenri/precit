@@ -8,15 +8,14 @@ import {
   Pressable,
   ScrollView,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Input } from '@/components/ui/Input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { loadMaterials, storeMaterial } from '@/data/material-storage';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import { COLORS } from '@/constants/design';
 import { Material } from '@/types/material';
 
@@ -156,10 +155,6 @@ export default function NewMaterialScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
-  const inputBg = useThemeColor({ light: '#f3f4f6', dark: '#2d3133' }, 'background');
-  const inputText = useThemeColor({}, 'text');
-  const placeholderColor = useThemeColor({ light: '#9ca3af', dark: '#6b7280' }, 'icon');
-
   const [initialized, setInitialized] = useState(!isEditing);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingCreatedAt, setEditingCreatedAt] = useState<string | null>(null);
@@ -234,8 +229,6 @@ export default function NewMaterialScreen() {
     router.back();
   }
 
-  const inputStyle = { backgroundColor: inputBg, color: inputText };
-
   if (!initialized) {
     return (
       <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -269,15 +262,13 @@ export default function NewMaterialScreen() {
             error={errors.has('name')}
             errorText={t('materials.requiredFields')}
           >
-            <TextInput
-              style={[inputStyle, { borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16, borderWidth: errors.has('name') ? 1.5 : 0 }]}
-              className={errors.has('name') ? 'border-red-400 dark:border-red-500' : ''}
+            <Input
               placeholder={t('materials.name')}
-              placeholderTextColor={placeholderColor}
               value={form.name}
               onChangeText={(v) => set('name', v)}
               returnKeyType="next"
               autoCapitalize="words"
+              wrapperStyle={errors.has('name') ? { borderColor: '#E5484D', borderWidth: 1.5 } : undefined}
             />
           </FormField>
 
@@ -315,14 +306,13 @@ export default function NewMaterialScreen() {
             error={errors.has('purchaseQuantity')}
             errorText={t('materials.invalidValue')}
           >
-            <TextInput
-              style={[inputStyle, { borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16, borderWidth: errors.has('purchaseQuantity') ? 1.5 : 0 }]}
+            <Input
               placeholder="0"
-              placeholderTextColor={placeholderColor}
               value={form.purchaseQuantity}
               onChangeText={(v) => set('purchaseQuantity', v)}
               keyboardType="decimal-pad"
               returnKeyType="next"
+              wrapperStyle={errors.has('purchaseQuantity') ? { borderColor: '#E5484D', borderWidth: 1.5 } : undefined}
             />
           </FormField>
 
@@ -333,14 +323,13 @@ export default function NewMaterialScreen() {
             error={errors.has('purchasePrice')}
             errorText={t('materials.invalidValue')}
           >
-            <TextInput
-              style={[inputStyle, { borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16, borderWidth: errors.has('purchasePrice') ? 1.5 : 0 }]}
+            <Input
               placeholder="0,00"
-              placeholderTextColor={placeholderColor}
               value={form.purchasePrice}
               onChangeText={(v) => set('purchasePrice', v)}
               keyboardType="decimal-pad"
               returnKeyType="next"
+              wrapperStyle={errors.has('purchasePrice') ? { borderColor: '#E5484D', borderWidth: 1.5 } : undefined}
             />
           </FormField>
 
@@ -361,10 +350,8 @@ export default function NewMaterialScreen() {
 
           {/* Current stock */}
           <FormField label={t('materials.currentStock')} optional={t('materials.optional')}>
-            <TextInput
-              style={[inputStyle, { borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16 }]}
+            <Input
               placeholder="0"
-              placeholderTextColor={placeholderColor}
               value={form.currentStock}
               onChangeText={(v) => set('currentStock', v)}
               keyboardType="decimal-pad"
@@ -374,10 +361,8 @@ export default function NewMaterialScreen() {
 
           {/* Minimum stock */}
           <FormField label={t('materials.minimumStock')} optional={t('materials.optional')}>
-            <TextInput
-              style={[inputStyle, { borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16 }]}
+            <Input
               placeholder="0"
-              placeholderTextColor={placeholderColor}
               value={form.minimumStock}
               onChangeText={(v) => set('minimumStock', v)}
               keyboardType="decimal-pad"
@@ -390,10 +375,8 @@ export default function NewMaterialScreen() {
 
           {/* Supplier */}
           <FormField label={t('materials.supplier')} optional={t('materials.optional')}>
-            <TextInput
-              style={[inputStyle, { borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16 }]}
+            <Input
               placeholder={t('materials.supplier')}
-              placeholderTextColor={placeholderColor}
               value={form.supplier}
               onChangeText={(v) => set('supplier', v)}
               returnKeyType="next"
@@ -403,10 +386,8 @@ export default function NewMaterialScreen() {
 
           {/* Notes */}
           <FormField label={t('materials.notes')} optional={t('materials.optional')}>
-            <TextInput
-              style={[inputStyle, { borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16, minHeight: 80, textAlignVertical: 'top' }]}
+            <Input
               placeholder={t('materials.notes')}
-              placeholderTextColor={placeholderColor}
               value={form.notes}
               onChangeText={(v) => set('notes', v)}
               multiline

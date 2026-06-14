@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { TextInput, View } from 'react-native';
+import { View } from 'react-native';
 
+import { Input } from '@/components/ui/Input';
 import { ThemedText } from '@/components/themed-text';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import { FormState } from '@/types/pricing-form';
 import { fmt } from '@/utils/format';
 import { FormField, SectionHeader } from '../form-helpers';
@@ -15,12 +15,6 @@ type Props = {
 
 export function AdditionalCostsStep({ form, set, laborCost }: Props) {
   const { t } = useTranslation();
-  const inputBg = useThemeColor({ light: '#f3f4f6', dark: '#2d3133' }, 'background');
-  const inputText = useThemeColor({}, 'text');
-  const placeholderColor = useThemeColor({ light: '#9ca3af', dark: '#6b7280' }, 'icon');
-
-  const inputStyle = { backgroundColor: inputBg, color: inputText } as const;
-  const fieldStyle = [inputStyle, { borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16 }] as const;
 
   return (
     <View style={{ gap: 20 }}>
@@ -40,10 +34,8 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
       <View className="flex-row gap-3">
         <View className="flex-1">
           <FormField label={t('pricing.laborHours')} optional={t('pricing.optional')}>
-            <TextInput
-              style={fieldStyle}
+            <Input
               placeholder="0"
-              placeholderTextColor={placeholderColor}
               value={form.laborHours}
               onChangeText={(v) => set('laborHours', v)}
               keyboardType="number-pad"
@@ -52,10 +44,8 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
         </View>
         <View className="flex-1">
           <FormField label={t('pricing.laborMinutes')} optional={t('pricing.optional')}>
-            <TextInput
-              style={fieldStyle}
+            <Input
               placeholder="0"
-              placeholderTextColor={placeholderColor}
               value={form.laborMinutes}
               onChangeText={(v) => set('laborMinutes', v)}
               keyboardType="number-pad"
@@ -65,10 +55,8 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
       </View>
 
       <FormField label={t('pricing.hourlyRate')} optional={t('pricing.optional')}>
-        <TextInput
-          style={fieldStyle}
+        <Input
           placeholder="0,00"
-          placeholderTextColor={placeholderColor}
           value={form.hourlyRate}
           onChangeText={(v) => set('hourlyRate', v)}
           keyboardType="decimal-pad"
@@ -91,10 +79,8 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
       <SectionHeader title={t('pricing.sectionAdditional')} />
 
       <FormField label={t('pricing.packagingCost')} optional={t('pricing.optional')}>
-        <TextInput
-          style={fieldStyle}
+        <Input
           placeholder="0,00"
-          placeholderTextColor={placeholderColor}
           value={form.packagingCost}
           onChangeText={(v) => set('packagingCost', v)}
           keyboardType="decimal-pad"
@@ -102,10 +88,8 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
       </FormField>
 
       <FormField label={t('pricing.fixedCost')} optional={t('pricing.optional')}>
-        <TextInput
-          style={fieldStyle}
+        <Input
           placeholder="0,00"
-          placeholderTextColor={placeholderColor}
           value={form.fixedCost}
           onChangeText={(v) => set('fixedCost', v)}
           keyboardType="decimal-pad"
@@ -113,10 +97,8 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
       </FormField>
 
       <FormField label={t('pricing.extraCost')} optional={t('pricing.optional')}>
-        <TextInput
-          style={fieldStyle}
+        <Input
           placeholder="0,00"
-          placeholderTextColor={placeholderColor}
           value={form.extraCost}
           onChangeText={(v) => set('extraCost', v)}
           keyboardType="decimal-pad"
@@ -128,10 +110,8 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
       <SectionHeader title={t('pricing.sectionFees')} />
 
       <FormField label={t('pricing.cardFeePercent')} optional={t('pricing.optional')}>
-        <TextInput
-          style={fieldStyle}
+        <Input
           placeholder="0"
-          placeholderTextColor={placeholderColor}
           value={form.cardFeePercent}
           onChangeText={(v) => set('cardFeePercent', v)}
           keyboardType="decimal-pad"
@@ -139,10 +119,8 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
       </FormField>
 
       <FormField label={t('pricing.marketplaceFeePercent')} optional={t('pricing.optional')}>
-        <TextInput
-          style={fieldStyle}
+        <Input
           placeholder="0"
-          placeholderTextColor={placeholderColor}
           value={form.marketplaceFeePercent}
           onChangeText={(v) => set('marketplaceFeePercent', v)}
           keyboardType="decimal-pad"
@@ -150,10 +128,8 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
       </FormField>
 
       <FormField label={t('pricing.otherFeePercent')} optional={t('pricing.optional')}>
-        <TextInput
-          style={fieldStyle}
+        <Input
           placeholder="0"
-          placeholderTextColor={placeholderColor}
           value={form.otherFeePercent}
           onChangeText={(v) => set('otherFeePercent', v)}
           keyboardType="decimal-pad"
