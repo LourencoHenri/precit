@@ -1,10 +1,10 @@
-import { Check } from 'lucide-react-native';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Check } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { COLORS } from '@/constants/design';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { COLORS } from "@/constants/design";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 type Props = {
   isFirst: boolean;
@@ -29,7 +29,7 @@ export function StepActions({
 }: Props) {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  const bg = useThemeColor({}, 'background');
+  const bg = useThemeColor({}, "background");
 
   const handleMain = isLast ? onSave : onNext;
   const disabled = !canAdvance || !!saving || !!saved;
@@ -37,7 +37,7 @@ export function StepActions({
   return (
     <View
       style={{
-        flexDirection: 'row',
+        flexDirection: "row",
         gap: 12,
         paddingHorizontal: 20,
         paddingTop: 14,
@@ -56,12 +56,14 @@ export function StepActions({
             borderRadius: 12,
             borderWidth: 1.5,
             borderColor: COLORS.primary,
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Text style={{ color: COLORS.primary, fontWeight: '600', fontSize: 15 }}>
-            {t('pricing.back')}
+          <Text
+            style={{ color: COLORS.primary, fontWeight: "600", fontSize: 15 }}
+          >
+            {t("pricing.back")}
           </Text>
         </Pressable>
       )}
@@ -73,9 +75,9 @@ export function StepActions({
           flex: 1,
           height: 52,
           borderRadius: 12,
-          backgroundColor: saved ? '#16a34a' : COLORS.primary,
-          alignItems: 'center',
-          justifyContent: 'center',
+          backgroundColor: saved ? "#16a34a" : COLORS.primary,
+          alignItems: "center",
+          justifyContent: "center",
           opacity: disabled && !saved ? 0.45 : 1,
         }}
       >
@@ -84,8 +86,8 @@ export function StepActions({
         ) : saved ? (
           <Check size={20} color="white" strokeWidth={2.5} />
         ) : (
-          <Text style={{ color: 'white', fontWeight: '600', fontSize: 15 }}>
-            {isLast ? t('pricing.save') : t('pricing.next')}
+          <Text style={{ color: "white", fontWeight: "600", fontSize: 15 }}>
+            {isLast ? t("pricing.save") : t("pricing.next")}
           </Text>
         )}
       </Pressable>

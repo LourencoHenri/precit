@@ -10,6 +10,7 @@ import {
   Settings,
   ShoppingBag,
   Tag,
+  User,
 } from 'lucide-react-native';
 import { OpaqueColorValue, StyleProp, ViewStyle } from 'react-native';
 
@@ -25,6 +26,7 @@ const ICONS = {
   'plus': Plus,
   'search': Search,
   'more-vertical': MoreVertical,
+  'user': User,
 } as const;
 
 export type IconSymbolName = keyof typeof ICONS;

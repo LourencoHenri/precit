@@ -2,7 +2,9 @@
   "nav": {
     "products": "Produkte",
     "pricing": "Preis berechnen",
-    "materials": "Materialien"
+    "materials": "Materialien",
+    "profile": "Profil",
+    "settings": "Einstellungen"
   },
   "home": {
     "title": "Registrierte Produkte",
@@ -15,7 +17,41 @@
     "theme": "Design",
     "light": "Hell",
     "dark": "Dunkel",
-    "language": "Sprache"
+    "language": "Sprache",
+    "appearance": "Erscheinungsbild",
+    "notifications": "Benachrichtigungen",
+    "notificationsDesc": "Warnungen und Erinnerungen",
+    "security": "Sicherheit",
+    "securityDesc": "PIN und Biometrie",
+    "data": "Daten & Datenschutz",
+    "exportData": "Daten exportieren",
+    "clearData": "Lokale Daten löschen",
+    "about": "Über",
+    "version": "Version",
+    "terms": "Nutzungsbedingungen",
+    "privacy": "Datenschutzrichtlinie",
+    "comingSoon": "Bald verfügbar"
+  },
+  "profile": {
+    "title": "Profil",
+    "account": "Konto",
+    "editProfile": "Profil bearbeiten",
+    "changePhoto": "Foto ändern",
+    "changePassword": "Passwort ändern",
+    "subscription": "Mein Plan",
+    "preferences": "Einstellungen",
+    "openSettings": "Einstellungen",
+    "logout": "Abmelden",
+    "deleteAccount": "Konto löschen",
+    "confirmLogout": "Abmelden?",
+    "confirmLogoutMessage": "Möchten Sie sich wirklich abmelden?",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "namePlaceholder": "Ihr Name",
+    "emailPlaceholder": "ihre@email.com",
+    "comingSoon": "Bald verfügbar",
+    "dangerZone": "Gefahrenzone",
+    "guestName": "Benutzer"
   },
   "pricing": {
     "title": "Preis berechnen",

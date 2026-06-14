@@ -2,7 +2,9 @@
   "nav": {
     "products": "Produtos",
     "pricing": "Precificar",
-    "materials": "Materiais"
+    "materials": "Materiais",
+    "profile": "Perfil",
+    "settings": "Configurações"
   },
   "home": {
     "title": "Produtos cadastrados",
@@ -15,7 +17,41 @@
     "theme": "Tema",
     "light": "Claro",
     "dark": "Escuro",
-    "language": "Idioma"
+    "language": "Idioma",
+    "appearance": "Aparência",
+    "notifications": "Notificações",
+    "notificationsDesc": "Alertas e lembretes",
+    "security": "Segurança",
+    "securityDesc": "PIN e biometria",
+    "data": "Dados e privacidade",
+    "exportData": "Exportar dados",
+    "clearData": "Limpar dados locais",
+    "about": "Sobre",
+    "version": "Versão",
+    "terms": "Termos de uso",
+    "privacy": "Política de privacidade",
+    "comingSoon": "Em breve"
+  },
+  "profile": {
+    "title": "Perfil",
+    "account": "Conta",
+    "editProfile": "Editar perfil",
+    "changePhoto": "Alterar foto",
+    "changePassword": "Alterar senha",
+    "subscription": "Meu plano",
+    "preferences": "Preferências",
+    "openSettings": "Configurações",
+    "logout": "Sair da conta",
+    "deleteAccount": "Excluir conta",
+    "confirmLogout": "Sair da conta?",
+    "confirmLogoutMessage": "Tem certeza que deseja sair?",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "namePlaceholder": "Seu nome",
+    "emailPlaceholder": "seu@email.com",
+    "comingSoon": "Em breve",
+    "dangerZone": "Zona de perigo",
+    "guestName": "Usuário"
   },
   "pricing": {
     "title": "Precificar",

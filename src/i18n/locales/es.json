@@ -2,7 +2,9 @@
   "nav": {
     "products": "Productos",
     "pricing": "Cotizar",
-    "materials": "Materiales"
+    "materials": "Materiales",
+    "profile": "Perfil",
+    "settings": "Configuración"
   },
   "home": {
     "title": "Productos registrados",
@@ -15,7 +17,41 @@
     "theme": "Tema",
     "light": "Claro",
     "dark": "Oscuro",
-    "language": "Idioma"
+    "language": "Idioma",
+    "appearance": "Apariencia",
+    "notifications": "Notificaciones",
+    "notificationsDesc": "Alertas y recordatorios",
+    "security": "Seguridad",
+    "securityDesc": "PIN y biometría",
+    "data": "Datos y privacidad",
+    "exportData": "Exportar datos",
+    "clearData": "Borrar datos locales",
+    "about": "Acerca de",
+    "version": "Versión",
+    "terms": "Términos de uso",
+    "privacy": "Política de privacidad",
+    "comingSoon": "Próximamente"
+  },
+  "profile": {
+    "title": "Perfil",
+    "account": "Cuenta",
+    "editProfile": "Editar perfil",
+    "changePhoto": "Cambiar foto",
+    "changePassword": "Cambiar contraseña",
+    "subscription": "Mi plan",
+    "preferences": "Preferencias",
+    "openSettings": "Configuración",
+    "logout": "Cerrar sesión",
+    "deleteAccount": "Eliminar cuenta",
+    "confirmLogout": "¿Cerrar sesión?",
+    "confirmLogoutMessage": "¿Estás seguro de que deseas cerrar sesión?",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "namePlaceholder": "Tu nombre",
+    "emailPlaceholder": "tu@email.com",
+    "comingSoon": "Próximamente",
+    "dangerZone": "Zona de peligro",
+    "guestName": "Usuario"
   },
   "pricing": {
     "title": "Cotizar",

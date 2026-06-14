@@ -53,6 +53,10 @@ export default function RootLayout() {
             name="new-product"
             options={{ title: t("pricing.newProduct") }}
           />
+          <Stack.Screen
+            name="settings"
+            options={{ headerShown: false }}
+          />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

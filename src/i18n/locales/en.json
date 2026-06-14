@@ -2,7 +2,9 @@
   "nav": {
     "products": "Products",
     "pricing": "Pricing",
-    "materials": "Materials"
+    "materials": "Materials",
+    "profile": "Profile",
+    "settings": "Settings"
   },
   "home": {
     "title": "Registered products",
@@ -15,7 +17,41 @@
     "theme": "Theme",
     "light": "Light",
     "dark": "Dark",
-    "language": "Language"
+    "language": "Language",
+    "appearance": "Appearance",
+    "notifications": "Notifications",
+    "notificationsDesc": "Alerts and reminders",
+    "security": "Security",
+    "securityDesc": "PIN and biometrics",
+    "data": "Data & privacy",
+    "exportData": "Export data",
+    "clearData": "Clear local data",
+    "about": "About",
+    "version": "Version",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "comingSoon": "Coming soon"
+  },
+  "profile": {
+    "title": "Profile",
+    "account": "Account",
+    "editProfile": "Edit profile",
+    "changePhoto": "Change photo",
+    "changePassword": "Change password",
+    "subscription": "My plan",
+    "preferences": "Preferences",
+    "openSettings": "Settings",
+    "logout": "Sign out",
+    "deleteAccount": "Delete account",
+    "confirmLogout": "Sign out?",
+    "confirmLogoutMessage": "Are you sure you want to sign out?",
+    "cancel": "Cancel",
+    "save": "Save",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "your@email.com",
+    "comingSoon": "Coming soon",
+    "dangerZone": "Danger zone",
+    "guestName": "User"
   },
   "pricing": {
     "title": "Pricing",

@@ -9,7 +9,7 @@ import { IconSymbol } from "./ui/icon-symbol";
 type TabConfig = {
   name: string;
   label: string;
-  icon: "shopping-bag" | "tag" | "box" | "plus";
+  icon: "shopping-bag" | "tag" | "box" | "plus" | "user";
   isCenter?: boolean;
 };
 
@@ -17,6 +17,7 @@ const TABS: TabConfig[] = [
   { name: "index", label: "Produtos", icon: "shopping-bag" },
   { name: "pricing", label: "Precificar", icon: "plus", isCenter: true },
   { name: "materials", label: "Materiais", icon: "box" },
+  { name: "profile", label: "Perfil", icon: "user" },
 ];
 
 export function CustomTabBar({ state, navigation }: BottomTabBarProps) {
@@ -126,7 +127,9 @@ export function CustomTabBar({ state, navigation }: BottomTabBarProps) {
                   height: 32,
                   alignItems: "center",
                   justifyContent: "center",
-                  backgroundColor: isFocused ? COLORS.pillActive : "transparent",
+                  backgroundColor: isFocused
+                    ? COLORS.pillActive
+                    : "transparent",
                   borderRadius: 16,
                 }}
               >
