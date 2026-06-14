@@ -1,29 +1,51 @@
+import { Check } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { COLORS } from '@/constants/design';
 
 export default function PricingScreen() {
   const { t } = useTranslation();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
-  const iconColor = useThemeColor({}, 'icon');
+
+  const benefits = [
+    t('pricing.benefit1'),
+    t('pricing.benefit2'),
+    t('pricing.benefit3'),
+  ];
 
   return (
-    <ThemedView className="flex-1" style={{ paddingTop: insets.top }}>
-      <View className="flex-1 items-center justify-center px-10 gap-6">
-        <IconSymbol
-          name="tag.fill"
-          size={56}
-          color={iconColor}
-          style={{ opacity: 0.3 }}
-        />
-        <View className="items-center gap-2">
+    <ThemedView className="flex-1">
+      <AppHeader title={t('nav.pricing')} />
+
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingHorizontal: 32,
+          gap: 32,
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: COLORS.primaryContainer,
+            borderRadius: 28,
+            width: 112,
+            height: 112,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <IconSymbol name="tag" size={52} color={COLORS.primary} />
+        </View>
+
+        <View style={{ alignItems: 'center', gap: 8 }}>
           <ThemedText type="title" className="text-center">
             {t('pricing.title')}
           </ThemedText>
@@ -31,11 +53,43 @@ export default function PricingScreen() {
             {t('pricing.subtitle')}
           </ThemedText>
         </View>
+
+        <View style={{ gap: 14, width: '100%' }}>
+          {benefits.map((benefit) => (
+            <View
+              key={benefit}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}
+            >
+              <View
+                style={{
+                  width: 26,
+                  height: 26,
+                  borderRadius: 13,
+                  backgroundColor: COLORS.primaryContainer,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <Check size={14} color={COLORS.primary} strokeWidth={2.5} />
+              </View>
+              <ThemedText style={{ fontSize: 15, flex: 1 }}>{benefit}</ThemedText>
+            </View>
+          ))}
+        </View>
+
         <Pressable
           onPress={() => router.push('/new-product')}
-          className="bg-primary rounded-xl px-8 py-4 items-center"
+          style={{
+            backgroundColor: COLORS.primary,
+            borderRadius: 14,
+            paddingHorizontal: 32,
+            paddingVertical: 16,
+            alignItems: 'center',
+            width: '100%',
+          }}
         >
-          <Text className="text-white font-semibold text-base">
+          <Text style={{ color: 'white', fontWeight: '600', fontSize: 16, letterSpacing: 0.3 }}>
             {t('pricing.newProduct')}
           </Text>
         </Pressable>

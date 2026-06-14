@@ -24,3 +24,8 @@ export async function storeProduct(product: Product): Promise<void> {
   }
   await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(list));
 }
+
+export async function deleteProduct(id: string): Promise<void> {
+  const list = await loadProducts();
+  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(list.filter((p) => p.id !== id)));
+}

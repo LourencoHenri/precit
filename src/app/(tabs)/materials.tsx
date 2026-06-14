@@ -1,32 +1,64 @@
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, FlatList, Pressable, TextInput, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Alert, ActivityIndicator, FlatList, Pressable, TextInput, View } from 'react-native';
 
+import { AppHeader } from '@/components/app-header';
 import { MaterialCard } from '@/components/material-card';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import { deleteMaterial } from '@/data/material-storage';
 import { useMaterials } from '@/hooks/use-materials';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import { Material } from '@/types/material';
+
+const PRIMARY = '#6750A4';
+const SURFACE = '#FEF7FF';
+const INACTIVE = '#49454F';
 
 export default function MaterialsScreen() {
   const { t } = useTranslation();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const [search, setSearch] = useState('');
   const { materials, loading, refresh } = useMaterials();
-
-  const iconColor = useThemeColor({}, 'icon');
-  const placeholderColor = useThemeColor({ light: '#9ca3af', dark: '#6b7280' }, 'icon');
 
   useFocusEffect(
     useCallback(() => {
       refresh();
     }, [refresh]),
   );
+
+  function handleMaterialOptions(material: Material) {
+    Alert.alert(material.name, undefined, [
+      {
+        text: t('materials.edit'),
+        onPress: () =>
+          router.push({ pathname: '/new-material', params: { id: material.id } }),
+      },
+      {
+        text: t('materials.delete'),
+        style: 'destructive',
+        onPress: () => {
+          Alert.alert(
+            t('materials.confirmDelete'),
+            t('materials.confirmDeleteMessage'),
+            [
+              { text: t('materials.cancel'), style: 'cancel' },
+              {
+                text: t('materials.delete'),
+                style: 'destructive',
+                onPress: async () => {
+                  await deleteMaterial(material.id);
+                  refresh();
+                },
+              },
+            ],
+          );
+        },
+      },
+      { text: t('materials.cancel'), style: 'cancel' },
+    ]);
+  }
 
   const filtered = useMemo<Material[]>(() => {
     const q = search.toLowerCase();
@@ -40,37 +72,64 @@ export default function MaterialsScreen() {
   }, [materials, search]);
 
   return (
-    <ThemedView className="flex-1" style={{ paddingTop: insets.top }}>
-      <View className="flex-row items-center justify-between px-5 pt-4 pb-3">
-        <ThemedText type="title" className="text-2xl leading-[30px]">
-          {t('materials.title')}
-        </ThemedText>
-        <Pressable
-          onPress={() => router.push('/new-material')}
-          hitSlop={12}
-          accessibilityLabel={t('materials.newMaterial')}
-        >
-          <IconSymbol name="plus" size={26} color={iconColor} />
-        </Pressable>
-      </View>
+    <ThemedView className="flex-1">
+      <AppHeader title={t('nav.materials')} />
 
-      <View className="px-4 pb-3 border-b border-zinc-200 dark:border-[#2d3133]">
-        <View className="flex-row items-center bg-zinc-100 dark:bg-[#2d3133] rounded-xl px-3 py-2">
+      <View
+        style={{
+          paddingTop: 8,
+          paddingHorizontal: 16,
+          paddingBottom: 10,
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: SURFACE,
+            borderRadius: 4,
+            paddingLeft: 8,
+            paddingRight: 16,
+            height: 56,
+          }}
+        >
+          <View style={{ width: 40, height: 48, alignItems: 'center', justifyContent: 'center' }}>
+            <IconSymbol name="search" size={22} color={INACTIVE} />
+          </View>
           <TextInput
-            className="flex-1 text-base text-[#11181C] dark:text-[#ECEDEE] p-0"
+            style={{ flex: 1, fontSize: 16, color: '#1D1B20', letterSpacing: 0.5, padding: 0 }}
             placeholder={t('materials.searchPlaceholder')}
-            placeholderTextColor={placeholderColor}
+            placeholderTextColor={INACTIVE}
             value={search}
             onChangeText={setSearch}
             returnKeyType="search"
             clearButtonMode="while-editing"
           />
         </View>
+        <Pressable
+          onPress={() => router.push('/new-material')}
+          hitSlop={12}
+          accessibilityLabel={t('materials.newMaterial')}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 20,
+            backgroundColor: PRIMARY,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <IconSymbol name="plus" size={22} color="white" />
+        </Pressable>
       </View>
 
       {loading ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#0a7ea4" />
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color={PRIMARY} />
         </View>
       ) : (
         <FlatList
@@ -81,11 +140,12 @@ export default function MaterialsScreen() {
               material={item}
               unitCostLabel={t('materials.unitCost')}
               stockLabel={t('materials.currentStock')}
+              onOptions={handleMaterialOptions}
             />
           )}
           contentContainerStyle={filtered.length === 0 ? { flex: 1 } : { paddingVertical: 8 }}
           ListEmptyComponent={
-            <View className="flex-1 items-center justify-center pt-20">
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 80 }}>
               <ThemedText className="text-base opacity-50">{t('materials.empty')}</ThemedText>
             </View>
           }

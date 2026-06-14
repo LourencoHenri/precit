@@ -1,7 +1,8 @@
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -14,8 +15,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { storeMaterial } from '@/data/material-storage';
+import { loadMaterials, storeMaterial } from '@/data/material-storage';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { COLORS } from '@/constants/design';
 import { Material } from '@/types/material';
 
 const UNITS = ['unidade', 'pacote', 'rolo', 'metro', 'centímetro', 'kg', 'grama', 'litro', 'ml', 'caixa'];
@@ -37,6 +39,22 @@ type ErrorField = 'name' | 'purchaseUnit' | 'purchaseQuantity' | 'purchasePrice'
 
 function parseDecimal(value: string): number {
   return parseFloat(value.replace(',', '.'));
+}
+
+function materialToFormState(material: Material): FormState {
+  const str = (n: number | undefined) => (n !== undefined ? String(n) : '');
+  const fmt = (n: number) => n.toFixed(2).replace('.', ',');
+  return {
+    name: material.name,
+    category: material.category ?? '',
+    purchaseUnit: material.purchaseUnit,
+    purchaseQuantity: String(material.purchaseQuantity),
+    purchasePrice: fmt(material.purchasePrice),
+    currentStock: str(material.currentStock),
+    minimumStock: str(material.minimumStock),
+    supplier: material.supplier ?? '',
+    notes: material.notes ?? '',
+  };
 }
 
 function ChipSelector({
@@ -119,8 +137,22 @@ function FormField({ label, required, optional, error, errorText, children }: Fi
   );
 }
 
+const EMPTY_FORM: FormState = {
+  name: '',
+  category: '',
+  purchaseUnit: '',
+  purchaseQuantity: '',
+  purchasePrice: '',
+  currentStock: '',
+  minimumStock: '',
+  supplier: '',
+  notes: '',
+};
+
 export default function NewMaterialScreen() {
   const { t } = useTranslation();
+  const { id: editId } = useLocalSearchParams<{ id?: string }>();
+  const isEditing = !!editId;
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -128,19 +160,28 @@ export default function NewMaterialScreen() {
   const inputText = useThemeColor({}, 'text');
   const placeholderColor = useThemeColor({ light: '#9ca3af', dark: '#6b7280' }, 'icon');
 
-  const [form, setForm] = useState<FormState>({
-    name: '',
-    category: '',
-    purchaseUnit: '',
-    purchaseQuantity: '',
-    purchasePrice: '',
-    currentStock: '',
-    minimumStock: '',
-    supplier: '',
-    notes: '',
-  });
+  const [initialized, setInitialized] = useState(!isEditing);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingCreatedAt, setEditingCreatedAt] = useState<string | null>(null);
+  const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [errors, setErrors] = useState<Set<ErrorField>>(new Set());
   const [saving, setSaving] = useState(false);
+
+  // Load material data when editing
+  useEffect(() => {
+    if (!editId) return;
+    loadMaterials().then((materials) => {
+      const material = materials.find((m) => m.id === editId);
+      if (!material) {
+        router.back();
+        return;
+      }
+      setForm(materialToFormState(material));
+      setEditingId(material.id);
+      setEditingCreatedAt(material.createdAt);
+      setInitialized(true);
+    });
+  }, [editId]);
 
   function set(field: keyof FormState, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -173,7 +214,7 @@ export default function NewMaterialScreen() {
     setSaving(true);
     const now = new Date().toISOString();
     const material: Material = {
-      id: Date.now().toString(),
+      id: editingId ?? Date.now().toString(),
       name: form.name.trim(),
       category: form.category || undefined,
       purchaseUnit: form.purchaseUnit,
@@ -184,7 +225,7 @@ export default function NewMaterialScreen() {
       minimumStock: form.minimumStock ? parseDecimal(form.minimumStock) : undefined,
       supplier: form.supplier.trim() || undefined,
       notes: form.notes.trim() || undefined,
-      createdAt: now,
+      createdAt: editingCreatedAt ?? now,
       updatedAt: now,
     };
 
@@ -195,8 +236,22 @@ export default function NewMaterialScreen() {
 
   const inputStyle = { backgroundColor: inputBg, color: inputText };
 
+  if (!initialized) {
+    return (
+      <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </ThemedView>
+    );
+  }
+
   return (
     <ThemedView className="flex-1">
+      <Stack.Screen
+        options={{
+          title: isEditing ? t('materials.editMaterial') : t('materials.newMaterial'),
+        }}
+      />
+
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

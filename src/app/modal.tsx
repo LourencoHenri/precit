@@ -29,7 +29,7 @@ function OptionRow({ label, selected, onPress }: OptionRowProps) {
       <ThemedText className={selected ? 'text-primary dark:text-primary font-semibold' : undefined}>
         {label}
       </ThemedText>
-      {selected && <IconSymbol name="chevron.right" size={16} color="#0a7ea4" />}
+      {selected && <IconSymbol name="chevron-right" size={16} color="#0a7ea4" />}
     </Pressable>
   );
 }

@@ -24,3 +24,8 @@ export async function storeMaterial(material: Material): Promise<void> {
   }
   await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(list));
 }
+
+export async function deleteMaterial(id: string): Promise<void> {
+  const list = await loadMaterials();
+  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(list.filter((m) => m.id !== id)));
+}

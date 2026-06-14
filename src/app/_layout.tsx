@@ -1,23 +1,23 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
-} from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import 'react-native-reanimated';
+} from "@react-navigation/native";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import "react-native-reanimated";
 
-import i18n, { LANGUAGE_STORAGE_KEY } from '@/i18n';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { AppThemeProvider } from '@/providers/theme-provider';
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import i18n, { LANGUAGE_STORAGE_KEY } from "@/i18n";
+import { AppThemeProvider } from "@/providers/theme-provider";
 
-import '../global.css';
+import "../global.css";
 
 export const unstable_settings = {
-  anchor: '(tabs)',
+  anchor: "(tabs)",
 };
 
 export default function RootLayout() {
@@ -38,20 +38,20 @@ export default function RootLayout() {
 
   return (
     <AppThemeProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen
             name="modal"
-            options={{ presentation: 'modal', title: t('settings.title') }}
+            options={{ presentation: "modal", title: t("settings.title") }}
           />
           <Stack.Screen
             name="new-material"
-            options={{ title: t('materials.newMaterial') }}
+            options={{ title: t("materials.newMaterial") }}
           />
           <Stack.Screen
             name="new-product"
-            options={{ title: t('pricing.newProduct') }}
+            options={{ title: t("pricing.newProduct") }}
           />
         </Stack>
         <StatusBar style="auto" />

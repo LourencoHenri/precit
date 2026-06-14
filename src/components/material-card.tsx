@@ -1,22 +1,25 @@
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
+import { IconSymbol } from '@/components/ui/icon-symbol';
+import { COLORS } from '@/constants/design';
 import { Material } from '@/types/material';
 
 type Props = {
   material: Material;
   unitCostLabel: string;
   stockLabel: string;
+  onOptions?: (material: Material) => void;
 };
 
 function formatPrice(value: number): string {
   return `R$ ${value.toFixed(2).replace('.', ',')}`;
 }
 
-export function MaterialCard({ material, unitCostLabel, stockLabel }: Props) {
+export function MaterialCard({ material, unitCostLabel, stockLabel, onOptions }: Props) {
   return (
     <View className="bg-white dark:bg-[#1e2122] border border-zinc-200 dark:border-[#2d3133] rounded-xl mx-4 my-1.5 p-4 gap-2">
-      <View className="flex-row items-start justify-between gap-2">
+      <View className="flex-row items-center gap-2">
         <ThemedText type="defaultSemiBold" className="flex-1" numberOfLines={1}>
           {material.name}
         </ThemedText>
@@ -26,6 +29,11 @@ export function MaterialCard({ material, unitCostLabel, stockLabel }: Props) {
               {material.category}
             </ThemedText>
           </View>
+        ) : null}
+        {onOptions ? (
+          <Pressable onPress={() => onOptions(material)} hitSlop={8}>
+            <IconSymbol name="more-vertical" size={20} color={COLORS.onSurfaceVariant} />
+          </Pressable>
         ) : null}
       </View>
 
