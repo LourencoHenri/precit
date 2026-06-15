@@ -1,6 +1,6 @@
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+﻿import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -9,18 +9,37 @@ import {
   ScrollView,
   Text,
   View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Input } from '@/components/ui/Input';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { loadMaterials, storeMaterial } from '@/data/material-storage';
-import { COLORS } from '@/constants/design';
-import { Material } from '@/types/material';
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Input } from "@/components/ui/input";
+import { COLORS } from "@/constants/design";
+import { loadMaterials, storeMaterial } from "@/data/material-storage";
+import { Material } from "@/types/material";
 
-const UNITS = ['unidade', 'pacote', 'rolo', 'metro', 'centímetro', 'kg', 'grama', 'litro', 'ml', 'caixa'];
-const CATEGORIES = ['Tecido', 'Linha', 'Aviamento', 'Embalagem', 'Acabamento', 'Ferramenta', 'Outro'];
+const UNITS = [
+  "unidade",
+  "pacote",
+  "rolo",
+  "metro",
+  "centímetro",
+  "kg",
+  "grama",
+  "litro",
+  "ml",
+  "caixa",
+];
+const CATEGORIES = [
+  "Tecido",
+  "Linha",
+  "Aviamento",
+  "Embalagem",
+  "Acabamento",
+  "Ferramenta",
+  "Outro",
+];
 
 type FormState = {
   name: string;
@@ -34,25 +53,29 @@ type FormState = {
   notes: string;
 };
 
-type ErrorField = 'name' | 'purchaseUnit' | 'purchaseQuantity' | 'purchasePrice';
+type ErrorField =
+  | "name"
+  | "purchaseUnit"
+  | "purchaseQuantity"
+  | "purchasePrice";
 
 function parseDecimal(value: string): number {
-  return parseFloat(value.replace(',', '.'));
+  return parseFloat(value.replace(",", "."));
 }
 
 function materialToFormState(material: Material): FormState {
-  const str = (n: number | undefined) => (n !== undefined ? String(n) : '');
-  const fmt = (n: number) => n.toFixed(2).replace('.', ',');
+  const str = (n: number | undefined) => (n !== undefined ? String(n) : "");
+  const fmt = (n: number) => n.toFixed(2).replace(".", ",");
   return {
     name: material.name,
-    category: material.category ?? '',
+    category: material.category ?? "",
     purchaseUnit: material.purchaseUnit,
     purchaseQuantity: String(material.purchaseQuantity),
     purchasePrice: fmt(material.purchasePrice),
     currentStock: str(material.currentStock),
     minimumStock: str(material.minimumStock),
-    supplier: material.supplier ?? '',
-    notes: material.notes ?? '',
+    supplier: material.supplier ?? "",
+    notes: material.notes ?? "",
   };
 }
 
@@ -78,21 +101,21 @@ function ChipSelector({
         return (
           <Pressable
             key={opt}
-            onPress={() => onSelect(isSelected ? '' : opt)}
+            onPress={() => onSelect(isSelected ? "" : opt)}
             className={[
-              'px-3 py-1.5 rounded-full border',
+              "px-3 py-1.5 rounded-full border",
               isSelected
-                ? 'bg-primary border-primary'
+                ? "bg-primary border-primary"
                 : hasError
-                  ? 'border-red-400 dark:border-red-500'
-                  : 'border-zinc-300 dark:border-[#2d3133]',
-            ].join(' ')}
+                  ? "border-red-400 dark:border-red-500"
+                  : "border-zinc-300 dark:border-[#2d3133]",
+            ].join(" ")}
           >
             <Text
               className={
                 isSelected
-                  ? 'text-white text-sm font-medium'
-                  : 'text-sm text-[#11181C] dark:text-[#ECEDEE]'
+                  ? "text-white text-sm font-medium"
+                  : "text-sm text-[#11181C] dark:text-[#ECEDEE]"
               }
             >
               {opt}
@@ -113,7 +136,14 @@ type FieldProps = {
   children: React.ReactNode;
 };
 
-function FormField({ label, required, optional, error, errorText, children }: FieldProps) {
+function FormField({
+  label,
+  required,
+  optional,
+  error,
+  errorText,
+  children,
+}: FieldProps) {
   return (
     <View className="gap-2">
       <View className="flex-row items-center gap-1.5">
@@ -137,15 +167,15 @@ function FormField({ label, required, optional, error, errorText, children }: Fi
 }
 
 const EMPTY_FORM: FormState = {
-  name: '',
-  category: '',
-  purchaseUnit: '',
-  purchaseQuantity: '',
-  purchasePrice: '',
-  currentStock: '',
-  minimumStock: '',
-  supplier: '',
-  notes: '',
+  name: "",
+  category: "",
+  purchaseUnit: "",
+  purchaseQuantity: "",
+  purchasePrice: "",
+  currentStock: "",
+  minimumStock: "",
+  supplier: "",
+  notes: "",
 };
 
 export default function NewMaterialScreen() {
@@ -191,15 +221,18 @@ export default function NewMaterialScreen() {
 
   const qty = parseDecimal(form.purchaseQuantity);
   const price = parseDecimal(form.purchasePrice);
-  const unitCost = !isNaN(qty) && qty > 0 && !isNaN(price) && price >= 0 ? price / qty : null;
+  const unitCost =
+    !isNaN(qty) && qty > 0 && !isNaN(price) && price >= 0 ? price / qty : null;
 
   async function handleSave() {
     const newErrors = new Set<ErrorField>();
 
-    if (!form.name.trim()) newErrors.add('name');
-    if (!form.purchaseUnit) newErrors.add('purchaseUnit');
-    if (!form.purchaseQuantity || isNaN(qty) || qty <= 0) newErrors.add('purchaseQuantity');
-    if (!form.purchasePrice || isNaN(price) || price < 0) newErrors.add('purchasePrice');
+    if (!form.name.trim()) newErrors.add("name");
+    if (!form.purchaseUnit) newErrors.add("purchaseUnit");
+    if (!form.purchaseQuantity || isNaN(qty) || qty <= 0)
+      newErrors.add("purchaseQuantity");
+    if (!form.purchasePrice || isNaN(price) || price < 0)
+      newErrors.add("purchasePrice");
 
     if (newErrors.size > 0) {
       setErrors(newErrors);
@@ -216,8 +249,12 @@ export default function NewMaterialScreen() {
       purchaseQuantity: qty,
       purchasePrice: price,
       unitCost: price / qty,
-      currentStock: form.currentStock ? parseDecimal(form.currentStock) : undefined,
-      minimumStock: form.minimumStock ? parseDecimal(form.minimumStock) : undefined,
+      currentStock: form.currentStock
+        ? parseDecimal(form.currentStock)
+        : undefined,
+      minimumStock: form.minimumStock
+        ? parseDecimal(form.minimumStock)
+        : undefined,
       supplier: form.supplier.trim() || undefined,
       notes: form.notes.trim() || undefined,
       createdAt: editingCreatedAt ?? now,
@@ -231,7 +268,9 @@ export default function NewMaterialScreen() {
 
   if (!initialized) {
     return (
-      <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <ThemedView
+        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+      >
         <ActivityIndicator size="large" color={COLORS.primary} />
       </ThemedView>
     );
@@ -241,43 +280,56 @@ export default function NewMaterialScreen() {
     <ThemedView className="flex-1">
       <Stack.Screen
         options={{
-          title: isEditing ? t('materials.editMaterial') : t('materials.newMaterial'),
+          title: isEditing
+            ? t("materials.editMaterial")
+            : t("materials.newMaterial"),
         }}
       />
 
       <KeyboardAvoidingView
         className="flex-1"
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 0}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 88 : 0}
       >
         <ScrollView
-          contentContainerStyle={{ padding: 20, paddingBottom: Math.max(insets.bottom + 20, 40), gap: 24 }}
+          contentContainerStyle={{
+            padding: 20,
+            paddingBottom: Math.max(insets.bottom + 20, 40),
+            gap: 24,
+          }}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
           {/* Name */}
           <FormField
-            label={t('materials.name')}
+            label={t("materials.name")}
             required
-            error={errors.has('name')}
-            errorText={t('materials.requiredFields')}
+            error={errors.has("name")}
+            errorText={t("materials.requiredFields")}
           >
             <Input
-              placeholder={t('materials.name')}
+              placeholder={t("materials.name")}
               value={form.name}
-              onChangeText={(v) => set('name', v)}
+              onChangeText={(v) => set("name", v)}
               returnKeyType="next"
               autoCapitalize="words"
-              wrapperStyle={errors.has('name') ? { borderColor: '#E5484D', borderWidth: 1.5 } : undefined}
+              wrapperStyle={
+                errors.has("name")
+                  ? { borderColor: "#E5484D", borderWidth: 1.5 }
+                  : undefined
+              }
             />
           </FormField>
 
           {/* Category */}
-          <FormField label={t('materials.category')} optional={t('materials.optional')}>
+          <FormField
+            label={t("materials.category")}
+            optional={t("materials.optional")}
+          >
             <ChipSelector
               options={CATEGORIES}
               selected={form.category}
-              onSelect={(v) => set('category', v)}
+              onSelect={(v) => set("category", v)}
             />
           </FormField>
 
@@ -286,61 +338,72 @@ export default function NewMaterialScreen() {
 
           {/* Purchase unit */}
           <FormField
-            label={t('materials.purchaseUnit')}
+            label={t("materials.purchaseUnit")}
             required
-            error={errors.has('purchaseUnit')}
-            errorText={t('materials.requiredFields')}
+            error={errors.has("purchaseUnit")}
+            errorText={t("materials.requiredFields")}
           >
             <ChipSelector
               options={UNITS}
               selected={form.purchaseUnit}
-              onSelect={(v) => set('purchaseUnit', v)}
-              hasError={errors.has('purchaseUnit')}
+              onSelect={(v) => set("purchaseUnit", v)}
+              hasError={errors.has("purchaseUnit")}
             />
           </FormField>
 
           {/* Purchase quantity */}
           <FormField
-            label={t('materials.purchaseQuantity')}
+            label={t("materials.purchaseQuantity")}
             required
-            error={errors.has('purchaseQuantity')}
-            errorText={t('materials.invalidValue')}
+            error={errors.has("purchaseQuantity")}
+            errorText={t("materials.invalidValue")}
           >
             <Input
               placeholder="0"
               value={form.purchaseQuantity}
-              onChangeText={(v) => set('purchaseQuantity', v)}
+              onChangeText={(v) => set("purchaseQuantity", v)}
               keyboardType="decimal-pad"
               returnKeyType="next"
-              wrapperStyle={errors.has('purchaseQuantity') ? { borderColor: '#E5484D', borderWidth: 1.5 } : undefined}
+              wrapperStyle={
+                errors.has("purchaseQuantity")
+                  ? { borderColor: "#E5484D", borderWidth: 1.5 }
+                  : undefined
+              }
             />
           </FormField>
 
           {/* Purchase price */}
           <FormField
-            label={t('materials.purchasePrice')}
+            label={t("materials.purchasePrice")}
             required
-            error={errors.has('purchasePrice')}
-            errorText={t('materials.invalidValue')}
+            error={errors.has("purchasePrice")}
+            errorText={t("materials.invalidValue")}
           >
             <Input
               placeholder="0,00"
               value={form.purchasePrice}
-              onChangeText={(v) => set('purchasePrice', v)}
+              onChangeText={(v) => set("purchasePrice", v)}
               keyboardType="decimal-pad"
               returnKeyType="next"
-              wrapperStyle={errors.has('purchasePrice') ? { borderColor: '#E5484D', borderWidth: 1.5 } : undefined}
+              wrapperStyle={
+                errors.has("purchasePrice")
+                  ? { borderColor: "#E5484D", borderWidth: 1.5 }
+                  : undefined
+              }
             />
           </FormField>
 
-          {/* Unit cost — calculated */}
+          {/* Unit cost â€” calculated */}
           {unitCost !== null ? (
             <View className="rounded-xl px-4 py-3 border border-primary bg-zinc-50 dark:bg-[#1e2122]">
               <ThemedText className="text-xs text-[#687076] dark:text-[#9ba1a6] mb-1">
-                {t('materials.unitCost')}
+                {t("materials.unitCost")}
               </ThemedText>
-              <ThemedText type="defaultSemiBold" className="text-lg text-primary dark:text-primary">
-                {`R$ ${unitCost.toFixed(2).replace('.', ',')} / ${form.purchaseUnit || '…'}`}
+              <ThemedText
+                type="defaultSemiBold"
+                className="text-lg text-primary dark:text-primary"
+              >
+                {`R$ ${unitCost.toFixed(2).replace(".", ",")} / ${form.purchaseUnit || "â€¦"}`}
               </ThemedText>
             </View>
           ) : null}
@@ -349,22 +412,28 @@ export default function NewMaterialScreen() {
           <View className="h-px bg-zinc-200 dark:bg-[#2d3133]" />
 
           {/* Current stock */}
-          <FormField label={t('materials.currentStock')} optional={t('materials.optional')}>
+          <FormField
+            label={t("materials.currentStock")}
+            optional={t("materials.optional")}
+          >
             <Input
               placeholder="0"
               value={form.currentStock}
-              onChangeText={(v) => set('currentStock', v)}
+              onChangeText={(v) => set("currentStock", v)}
               keyboardType="decimal-pad"
               returnKeyType="next"
             />
           </FormField>
 
           {/* Minimum stock */}
-          <FormField label={t('materials.minimumStock')} optional={t('materials.optional')}>
+          <FormField
+            label={t("materials.minimumStock")}
+            optional={t("materials.optional")}
+          >
             <Input
               placeholder="0"
               value={form.minimumStock}
-              onChangeText={(v) => set('minimumStock', v)}
+              onChangeText={(v) => set("minimumStock", v)}
               keyboardType="decimal-pad"
               returnKeyType="next"
             />
@@ -374,22 +443,28 @@ export default function NewMaterialScreen() {
           <View className="h-px bg-zinc-200 dark:bg-[#2d3133]" />
 
           {/* Supplier */}
-          <FormField label={t('materials.supplier')} optional={t('materials.optional')}>
+          <FormField
+            label={t("materials.supplier")}
+            optional={t("materials.optional")}
+          >
             <Input
-              placeholder={t('materials.supplier')}
+              placeholder={t("materials.supplier")}
               value={form.supplier}
-              onChangeText={(v) => set('supplier', v)}
+              onChangeText={(v) => set("supplier", v)}
               returnKeyType="next"
               autoCapitalize="words"
             />
           </FormField>
 
           {/* Notes */}
-          <FormField label={t('materials.notes')} optional={t('materials.optional')}>
+          <FormField
+            label={t("materials.notes")}
+            optional={t("materials.optional")}
+          >
             <Input
-              placeholder={t('materials.notes')}
+              placeholder={t("materials.notes")}
               value={form.notes}
-              onChangeText={(v) => set('notes', v)}
+              onChangeText={(v) => set("notes", v)}
               multiline
               returnKeyType="done"
             />
@@ -403,7 +478,7 @@ export default function NewMaterialScreen() {
             style={{ opacity: saving ? 0.6 : 1 }}
           >
             <Text className="text-white font-semibold text-base">
-              {t('materials.save')}
+              {t("materials.save")}
             </Text>
           </Pressable>
         </ScrollView>

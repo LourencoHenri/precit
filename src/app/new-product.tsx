@@ -1,23 +1,30 @@
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, LayoutAnimation, Platform, ScrollView, UIManager, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  LayoutAnimation,
+  Platform,
+  ScrollView,
+  UIManager,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { ThemedView } from '@/components/themed-view';
-import { PricingStepper } from '@/components/pricing/pricing-stepper';
-import { StepActions } from '@/components/pricing/step-actions';
-import { ProductDataStep } from '@/components/pricing/steps/product-data-step';
-import { MaterialsStep } from '@/components/pricing/steps/materials-step';
-import { AdditionalCostsStep } from '@/components/pricing/steps/additional-costs-step';
-import { MarginStep } from '@/components/pricing/steps/margin-step';
-import { ReviewStep } from '@/components/pricing/steps/review-step';
-import { loadProducts, storeProduct } from '@/data/product-storage';
-import { useMaterials } from '@/hooks/use-materials';
-import { COLORS } from '@/constants/design';
-import { ErrorField, FormState } from '@/types/pricing-form';
-import { Product, ProductMaterial } from '@/types/product';
-import { parseDecimal } from '@/utils/format';
+import { PricingStepper } from "@/components/pricing/pricing-stepper";
+import { StepActions } from "@/components/pricing/step-actions";
+import { AdditionalCostsStep } from "@/components/pricing/steps/additional-costs-step";
+import { MarginStep } from "@/components/pricing/steps/margin-step";
+import { MaterialsStep } from "@/components/pricing/steps/materials-step";
+import { ProductDataStep } from "@/components/pricing/steps/product-data-step";
+import { ReviewStep } from "@/components/pricing/steps/review-step";
+import { ThemedView } from "@/components/themed-view";
+import { COLORS } from "@/constants/design";
+import { loadProducts, storeProduct } from "@/data/product-storage";
+import { useMaterials } from "@/hooks/use-materials";
+import { ErrorField, FormState } from "@/types/pricing-form";
+import { Product, ProductMaterial } from "@/types/product";
+import { parseDecimal } from "@/utils/format";
 import {
   calculateLaborCost,
   calculateMaterialCost,
@@ -25,41 +32,45 @@ import {
   calculateProfitValue,
   calculateSuggestedPrice,
   calculateTotalCost,
-} from '@/utils/pricing';
+} from "@/utils/pricing";
 
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
 const TOTAL_STEPS = 5;
 
 const EMPTY_FORM: FormState = {
-  name: '',
-  description: '',
-  category: '',
-  notes: '',
-  manualMaterialCost: '',
-  laborHours: '',
-  laborMinutes: '',
-  hourlyRate: '',
-  packagingCost: '',
-  fixedCost: '',
-  extraCost: '',
-  cardFeePercent: '',
-  marketplaceFeePercent: '',
-  otherFeePercent: '',
-  desiredProfitPercent: '',
-  desiredProfitValue: '',
+  name: "",
+  description: "",
+  category: "",
+  notes: "",
+  manualMaterialCost: "",
+  laborHours: "",
+  laborMinutes: "",
+  hourlyRate: "",
+  packagingCost: "",
+  fixedCost: "",
+  extraCost: "",
+  cardFeePercent: "",
+  marketplaceFeePercent: "",
+  otherFeePercent: "",
+  desiredProfitPercent: "",
+  desiredProfitValue: "",
 };
 
 function productToFormState(product: Product): FormState {
-  const fmt = (n: number | undefined) => (n ? n.toFixed(2).replace('.', ',') : '');
-  const str = (n: number | undefined) => (n ? String(n) : '');
+  const fmt = (n: number | undefined) =>
+    n ? n.toFixed(2).replace(".", ",") : "";
+  const str = (n: number | undefined) => (n ? String(n) : "");
   return {
     name: product.name,
-    description: product.description ?? '',
-    category: product.category ?? '',
-    notes: product.notes ?? '',
+    description: product.description ?? "",
+    category: product.category ?? "",
+    notes: product.notes ?? "",
     manualMaterialCost: fmt(product.manualMaterialCost),
     laborHours: str(product.laborHours),
     laborMinutes: str(product.laborMinutes),
@@ -87,11 +98,14 @@ export default function NewProductScreen() {
   const [initialized, setInitialized] = useState(!isEditing);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingCreatedAt, setEditingCreatedAt] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
 
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
-  const [productMaterials, setProductMaterials] = useState<ProductMaterial[]>([]);
-  const [finalPriceInput, setFinalPriceInput] = useState('');
+  const [productMaterials, setProductMaterials] = useState<ProductMaterial[]>(
+    [],
+  );
+  const [finalPriceInput, setFinalPriceInput] = useState("");
   const [finalPriceManual, setFinalPriceManual] = useState(false);
   const [errors, setErrors] = useState<Set<ErrorField>>(new Set());
   const [saving, setSaving] = useState(false);
@@ -108,10 +122,11 @@ export default function NewProductScreen() {
       }
       setForm(productToFormState(product));
       setProductMaterials(product.materials);
-      setFinalPriceInput(product.finalPrice.toFixed(2).replace('.', ','));
+      setFinalPriceInput(product.finalPrice.toFixed(2).replace(".", ","));
       setFinalPriceManual(true);
       setEditingId(product.id);
       setEditingCreatedAt(product.createdAt);
+      setImageUrl(product.imageUrl);
       setInitialized(true);
     });
   }, [editId]);
@@ -129,15 +144,19 @@ export default function NewProductScreen() {
     setForm((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => {
       const next = new Set(prev);
-      next.delete('name');
-      next.delete('margin');
+      next.delete("name");
+      next.delete("margin");
       return next;
     });
   }
 
   // ─── Derived calculations ────────────────────────────────────────
   const totalMaterialCost = useMemo(
-    () => calculateMaterialCost(productMaterials, parseDecimal(form.manualMaterialCost)),
+    () =>
+      calculateMaterialCost(
+        productMaterials,
+        parseDecimal(form.manualMaterialCost),
+      ),
     [productMaterials, form.manualMaterialCost],
   );
 
@@ -168,7 +187,13 @@ export default function NewProductScreen() {
         parseDecimal(form.fixedCost),
         parseDecimal(form.extraCost),
       ),
-    [totalMaterialCost, laborCost, form.packagingCost, form.fixedCost, form.extraCost],
+    [
+      totalMaterialCost,
+      laborCost,
+      form.packagingCost,
+      form.fixedCost,
+      form.extraCost,
+    ],
   );
 
   const totalFeesPercent = useMemo(
@@ -187,7 +212,8 @@ export default function NewProductScreen() {
       calculateSuggestedPrice({
         totalCost,
         desiredProfitPercent: profitPct > 0 ? profitPct : undefined,
-        desiredProfitValue: profitPct === 0 && profitVal > 0 ? profitVal : undefined,
+        desiredProfitValue:
+          profitPct === 0 && profitVal > 0 ? profitVal : undefined,
         totalFeesPercent,
       }),
     [totalCost, profitPct, profitVal, totalFeesPercent],
@@ -195,7 +221,9 @@ export default function NewProductScreen() {
 
   useEffect(() => {
     if (!finalPriceManual) {
-      setFinalPriceInput(suggestedPrice > 0 ? suggestedPrice.toFixed(2).replace('.', ',') : '');
+      setFinalPriceInput(
+        suggestedPrice > 0 ? suggestedPrice.toFixed(2).replace(".", ",") : "",
+      );
     }
   }, [suggestedPrice, finalPriceManual]);
 
@@ -214,12 +242,12 @@ export default function NewProductScreen() {
   // ─── Navigation ──────────────────────────────────────────────────
   function validateStep(s: number): boolean {
     if (s === 0 && !form.name.trim()) {
-      setErrors(new Set(['name']));
+      setErrors(new Set(["name"]));
       scrollRef.current?.scrollTo({ y: 0, animated: true });
       return false;
     }
     if (s === 3 && profitPct + totalFeesPercent >= 100 && profitPct > 0) {
-      setErrors(new Set(['margin']));
+      setErrors(new Set(["margin"]));
       scrollRef.current?.scrollTo({ y: 0, animated: true });
       return false;
     }
@@ -243,13 +271,13 @@ export default function NewProductScreen() {
   async function handleSave() {
     if (!form.name.trim()) {
       setStep(0);
-      setErrors(new Set(['name']));
+      setErrors(new Set(["name"]));
       scrollRef.current?.scrollTo({ y: 0, animated: true });
       return;
     }
     if (profitPct + totalFeesPercent >= 100 && profitPct > 0) {
       setStep(3);
-      setErrors(new Set(['margin']));
+      setErrors(new Set(["margin"]));
       scrollRef.current?.scrollTo({ y: 0, animated: true });
       return;
     }
@@ -262,20 +290,52 @@ export default function NewProductScreen() {
       description: form.description.trim() || undefined,
       category: form.category || undefined,
       notes: form.notes.trim() || undefined,
+      imageUrl: imageUrl || undefined,
       materials: productMaterials,
-      manualMaterialCost: parseDecimal(form.manualMaterialCost) > 0 ? parseDecimal(form.manualMaterialCost) : undefined,
-      laborHours: parseDecimal(form.laborHours) > 0 ? parseDecimal(form.laborHours) : undefined,
-      laborMinutes: parseDecimal(form.laborMinutes) > 0 ? parseDecimal(form.laborMinutes) : undefined,
-      hourlyRate: parseDecimal(form.hourlyRate) > 0 ? parseDecimal(form.hourlyRate) : undefined,
+      manualMaterialCost:
+        parseDecimal(form.manualMaterialCost) > 0
+          ? parseDecimal(form.manualMaterialCost)
+          : undefined,
+      laborHours:
+        parseDecimal(form.laborHours) > 0
+          ? parseDecimal(form.laborHours)
+          : undefined,
+      laborMinutes:
+        parseDecimal(form.laborMinutes) > 0
+          ? parseDecimal(form.laborMinutes)
+          : undefined,
+      hourlyRate:
+        parseDecimal(form.hourlyRate) > 0
+          ? parseDecimal(form.hourlyRate)
+          : undefined,
       laborCost,
-      packagingCost: parseDecimal(form.packagingCost) > 0 ? parseDecimal(form.packagingCost) : undefined,
-      fixedCost: parseDecimal(form.fixedCost) > 0 ? parseDecimal(form.fixedCost) : undefined,
-      extraCost: parseDecimal(form.extraCost) > 0 ? parseDecimal(form.extraCost) : undefined,
-      cardFeePercent: parseDecimal(form.cardFeePercent) > 0 ? parseDecimal(form.cardFeePercent) : undefined,
-      marketplaceFeePercent: parseDecimal(form.marketplaceFeePercent) > 0 ? parseDecimal(form.marketplaceFeePercent) : undefined,
-      otherFeePercent: parseDecimal(form.otherFeePercent) > 0 ? parseDecimal(form.otherFeePercent) : undefined,
+      packagingCost:
+        parseDecimal(form.packagingCost) > 0
+          ? parseDecimal(form.packagingCost)
+          : undefined,
+      fixedCost:
+        parseDecimal(form.fixedCost) > 0
+          ? parseDecimal(form.fixedCost)
+          : undefined,
+      extraCost:
+        parseDecimal(form.extraCost) > 0
+          ? parseDecimal(form.extraCost)
+          : undefined,
+      cardFeePercent:
+        parseDecimal(form.cardFeePercent) > 0
+          ? parseDecimal(form.cardFeePercent)
+          : undefined,
+      marketplaceFeePercent:
+        parseDecimal(form.marketplaceFeePercent) > 0
+          ? parseDecimal(form.marketplaceFeePercent)
+          : undefined,
+      otherFeePercent:
+        parseDecimal(form.otherFeePercent) > 0
+          ? parseDecimal(form.otherFeePercent)
+          : undefined,
       desiredProfitPercent: profitPct > 0 ? profitPct : undefined,
-      desiredProfitValue: profitPct === 0 && profitVal > 0 ? profitVal : undefined,
+      desiredProfitValue:
+        profitPct === 0 && profitVal > 0 ? profitVal : undefined,
       totalMaterialCost,
       totalCost,
       suggestedPrice,
@@ -295,14 +355,17 @@ export default function NewProductScreen() {
   // ─── Step can-advance logic ──────────────────────────────────────
   const canAdvance = useMemo(() => {
     if (step === 0) return form.name.trim().length > 0;
-    if (step === 3) return !(profitPct > 0 && profitPct + totalFeesPercent >= 100);
+    if (step === 3)
+      return !(profitPct > 0 && profitPct + totalFeesPercent >= 100);
     return true;
   }, [step, form.name, profitPct, totalFeesPercent]);
 
   // ─── Loading state while fetching product to edit ─────────────────
   if (!initialized) {
     return (
-      <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <ThemedView
+        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+      >
         <ActivityIndicator size="large" color={COLORS.primary} />
       </ThemedView>
     );
@@ -313,7 +376,7 @@ export default function NewProductScreen() {
     <ThemedView style={{ flex: 1 }}>
       <Stack.Screen
         options={{
-          title: isEditing ? t('pricing.editProduct') : t('pricing.newProduct'),
+          title: isEditing ? t("pricing.editProduct") : t("pricing.newProduct"),
         }}
       />
 
@@ -321,8 +384,8 @@ export default function NewProductScreen() {
 
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 0}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 88 : 0}
       >
         <ScrollView
           ref={scrollRef}
@@ -333,7 +396,15 @@ export default function NewProductScreen() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {step === 0 && <ProductDataStep form={form} set={set} errors={errors} />}
+          {step === 0 && (
+            <ProductDataStep
+              form={form}
+              set={set}
+              errors={errors}
+              imageUrl={imageUrl}
+              onImageChange={setImageUrl}
+            />
+          )}
           {step === 1 && (
             <MaterialsStep
               productMaterials={productMaterials}
@@ -344,7 +415,9 @@ export default function NewProductScreen() {
               set={set}
             />
           )}
-          {step === 2 && <AdditionalCostsStep form={form} set={set} laborCost={laborCost} />}
+          {step === 2 && (
+            <AdditionalCostsStep form={form} set={set} laborCost={laborCost} />
+          )}
           {step === 3 && (
             <MarginStep
               form={form}

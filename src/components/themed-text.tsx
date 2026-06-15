@@ -1,33 +1,30 @@
-import { Text, type TextProps } from "react-native";
+import { StyleSheet, Text, type TextProps } from 'react-native';
+
+import { useColors } from '@/hooks/use-colors';
 
 export type ThemedTextProps = TextProps & {
-  type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
-  className?: string;
+  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
 };
 
-const typeClasses: Record<NonNullable<ThemedTextProps["type"]>, string> = {
-  default: "text-base leading-6",
-  defaultSemiBold: "text-base leading-6 font-semibold",
-  title: "text-[32px] font-bold leading-8",
-  subtitle: "text-xl font-bold",
-  link: "text-base leading-[30px] text-primary dark:text-primary",
-};
-
-export function ThemedText({
-  type = "default",
-  className,
-  ...rest
-}: ThemedTextProps) {
+export function ThemedText({ type = 'default', style, ...rest }: ThemedTextProps) {
+  const colors = useColors();
   return (
     <Text
-      className={[
-        "text-[#11181C] dark:text-[#ECEDEE]",
-        typeClasses[type],
-        className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      style={[
+        { color: colors.onSurface },
+        typeStyles[type],
+        type === 'link' && { color: colors.primary },
+        style,
+      ]}
       {...rest}
     />
   );
 }
+
+const typeStyles = StyleSheet.create({
+  default: { fontSize: 16, lineHeight: 24 },
+  defaultSemiBold: { fontSize: 16, lineHeight: 24, fontWeight: '600' },
+  title: { fontSize: 32, fontWeight: '700', lineHeight: 32 },
+  subtitle: { fontSize: 20, fontWeight: '700' },
+  link: { fontSize: 16, lineHeight: 30 },
+});

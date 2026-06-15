@@ -1,28 +1,28 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Pressable, Text, View } from "react-native";
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Pressable, Text, View } from 'react-native';
 
-import { ThemedText } from "@/components/themed-text";
-import { Input } from "@/components/ui/Input";
-import { storeMaterial } from "@/data/material-storage";
-import { Material } from "@/types/material";
-import { FormState } from "@/types/pricing-form";
-import { ProductMaterial } from "@/types/product";
-import { parseDecimal } from "@/utils/format";
-import { ChipSelector, FormField } from "../form-helpers";
+import { ThemedText } from '@/components/themed-text';
+import { Input } from '@/components/ui/input';
+import { storeMaterial } from '@/data/material-storage';
+import { useColors } from '@/hooks/use-colors';
+import { Material } from '@/types/material';
+import { FormState } from '@/types/pricing-form';
+import { ProductMaterial } from '@/types/product';
+import { parseDecimal } from '@/utils/format';
+import { ChipSelector, FormField } from '../form-helpers';
 
-const PRIMARY = "#6750A4";
 const MATERIAL_UNITS = [
-  "unidade",
-  "pacote",
-  "rolo",
-  "metro",
-  "centímetro",
-  "kg",
-  "grama",
-  "litro",
-  "ml",
-  "caixa",
+  'unidade',
+  'pacote',
+  'rolo',
+  'metro',
+  'centímetro',
+  'kg',
+  'grama',
+  'litro',
+  'ml',
+  'caixa',
 ];
 
 const COMPACT_INPUT: object = { borderRadius: 10, height: 44 };
@@ -45,24 +45,24 @@ export function MaterialsStep({
   set,
 }: Props) {
   const { t } = useTranslation();
+  const colors = useColors();
 
   const [catalogOpen, setCatalogOpen] = useState(false);
-  const [catalogSearch, setCatalogSearch] = useState("");
+  const [catalogSearch, setCatalogSearch] = useState('');
   const [catalogSelected, setCatalogSelected] = useState<Material | null>(null);
-  const [catalogQty, setCatalogQty] = useState("");
+  const [catalogQty, setCatalogQty] = useState('');
 
   const [customOpen, setCustomOpen] = useState(false);
-  const [customName, setCustomName] = useState("");
-  const [customUnit, setCustomUnit] = useState("");
-  const [customUnitCost, setCustomUnitCost] = useState("");
-  const [customQty, setCustomQty] = useState("");
+  const [customName, setCustomName] = useState('');
+  const [customUnit, setCustomUnit] = useState('');
+  const [customUnitCost, setCustomUnitCost] = useState('');
+  const [customQty, setCustomQty] = useState('');
   const [customSaveToList, setCustomSaveToList] = useState(false);
 
   const filteredCatalog = catalog.filter(
     (m) =>
       m.name.toLowerCase().includes(catalogSearch.toLowerCase()) ||
-      (m.category?.toLowerCase().includes(catalogSearch.toLowerCase()) ??
-        false),
+      (m.category?.toLowerCase().includes(catalogSearch.toLowerCase()) ?? false),
   );
 
   function addFromCatalog() {
@@ -80,9 +80,9 @@ export function MaterialsStep({
     };
     onMaterialsChange([...productMaterials, item]);
     setCatalogOpen(false);
-    setCatalogSearch("");
+    setCatalogSearch('');
     setCatalogSelected(null);
-    setCatalogQty("");
+    setCatalogQty('');
   }
 
   async function addCustomMaterial() {
@@ -117,10 +117,10 @@ export function MaterialsStep({
     }
 
     setCustomOpen(false);
-    setCustomName("");
-    setCustomUnit("");
-    setCustomUnitCost("");
-    setCustomQty("");
+    setCustomName('');
+    setCustomUnit('');
+    setCustomUnitCost('');
+    setCustomQty('');
     setCustomSaveToList(false);
   }
 
@@ -133,10 +133,10 @@ export function MaterialsStep({
       {/* Step title */}
       <View style={{ gap: 4 }}>
         <ThemedText type="defaultSemiBold" style={{ fontSize: 18 }}>
-          {t("pricing.sectionMaterials")}
+          {t('pricing.sectionMaterials')}
         </ThemedText>
-        <ThemedText className="text-sm text-[#687076] dark:text-[#9ba1a6]">
-          {t("pricing.stepMaterialsDesc")}
+        <ThemedText style={{ fontSize: 14, color: colors.onSurfaceVariant }}>
+          {t('pricing.stepMaterialsDesc')}
         </ThemedText>
       </View>
 
@@ -144,22 +144,26 @@ export function MaterialsStep({
       {productMaterials.map((m) => (
         <View
           key={m.id}
-          className="flex-row items-center justify-between bg-zinc-100 dark:bg-[#2d3133] rounded-xl px-4 py-3"
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: colors.surfaceContainerHigh,
+            borderRadius: 12,
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+          }}
         >
           <View style={{ flex: 1, marginRight: 12 }}>
-            <ThemedText
-              type="defaultSemiBold"
-              className="text-sm"
-              numberOfLines={1}
-            >
+            <ThemedText type="defaultSemiBold" style={{ fontSize: 14 }} numberOfLines={1}>
               {m.name}
             </ThemedText>
-            <ThemedText className="text-xs text-[#687076] dark:text-[#9ba1a6]">
-              {`${m.quantityUsed} ${m.unit} × R$ ${m.unitCost.toFixed(2).replace(".", ",")} = R$ ${m.totalCost.toFixed(2).replace(".", ",")}`}
+            <ThemedText style={{ fontSize: 12, color: colors.onSurfaceVariant }}>
+              {`${m.quantityUsed} ${m.unit} × R$ ${m.unitCost.toFixed(2).replace('.', ',')} = R$ ${m.totalCost.toFixed(2).replace('.', ',')}`}
             </ThemedText>
           </View>
           <Pressable onPress={() => removeMaterial(m.id)} hitSlop={8}>
-            <Text className="text-lg text-red-500 font-bold leading-none">
+            <Text style={{ fontSize: 18, color: colors.error, fontWeight: '700', lineHeight: 18 }}>
               ×
             </Text>
           </Pressable>
@@ -168,14 +172,19 @@ export function MaterialsStep({
 
       {/* Catalog picker */}
       {catalogOpen && (
-        <View className="rounded-xl border border-zinc-200 dark:border-[#2d3133] overflow-hidden">
+        <View
+          style={{
+            borderRadius: 12,
+            borderWidth: 1,
+            borderColor: colors.outlineVariant,
+            overflow: 'hidden',
+          }}
+        >
           <View style={{ padding: 16, gap: 12 }}>
-            <ThemedText type="defaultSemiBold">
-              {t("pricing.addFromCatalog")}
-            </ThemedText>
+            <ThemedText type="defaultSemiBold">{t('pricing.addFromCatalog')}</ThemedText>
 
             <Input
-              placeholder={t("pricing.searchMaterial")}
+              placeholder={t('pricing.searchMaterial')}
               value={catalogSearch}
               onChangeText={setCatalogSearch}
               autoFocus
@@ -183,31 +192,28 @@ export function MaterialsStep({
             />
 
             {filteredCatalog.length === 0 ? (
-              <ThemedText className="text-sm opacity-50 text-center py-2">
-                {t("pricing.noCatalogMaterials")}
+              <ThemedText style={{ fontSize: 14, opacity: 0.5, textAlign: 'center', paddingVertical: 8 }}>
+                {t('pricing.noCatalogMaterials')}
               </ThemedText>
             ) : (
               <View style={{ gap: 8 }}>
                 {filteredCatalog.map((m) => (
                   <Pressable
                     key={m.id}
-                    onPress={() =>
-                      setCatalogSelected(
-                        catalogSelected?.id === m.id ? null : m,
-                      )
-                    }
-                    className={[
-                      "px-4 py-3 rounded-xl border",
-                      catalogSelected?.id === m.id
-                        ? "border-primary border-2"
-                        : "border-zinc-200 dark:border-[#2d3133]",
-                    ].join(" ")}
+                    onPress={() => setCatalogSelected(catalogSelected?.id === m.id ? null : m)}
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 12,
+                      borderRadius: 12,
+                      borderWidth: catalogSelected?.id === m.id ? 2 : 1,
+                      borderColor: catalogSelected?.id === m.id ? colors.primary : colors.outlineVariant,
+                    }}
                   >
-                    <ThemedText type="defaultSemiBold" className="text-sm">
+                    <ThemedText type="defaultSemiBold" style={{ fontSize: 14 }}>
                       {m.name}
                     </ThemedText>
-                    <ThemedText className="text-xs text-[#687076] dark:text-[#9ba1a6]">
-                      {`R$ ${m.unitCost.toFixed(2).replace(".", ",")} / ${m.purchaseUnit}`}
+                    <ThemedText style={{ fontSize: 12, color: colors.onSurfaceVariant }}>
+                      {`R$ ${m.unitCost.toFixed(2).replace('.', ',')} / ${m.purchaseUnit}`}
                     </ThemedText>
                   </Pressable>
                 ))}
@@ -216,8 +222,8 @@ export function MaterialsStep({
 
             {catalogSelected && (
               <View style={{ gap: 8 }}>
-                <ThemedText className="text-sm font-semibold text-[#687076] dark:text-[#9ba1a6]">
-                  {`${t("pricing.quantityUsed")} (${catalogSelected.purchaseUnit})`}
+                <ThemedText style={{ fontSize: 14, fontWeight: '600', color: colors.onSurfaceVariant }}>
+                  {`${t('pricing.quantityUsed')} (${catalogSelected.purchaseUnit})`}
                 </ThemedText>
                 <Input
                   placeholder="0"
@@ -229,31 +235,41 @@ export function MaterialsStep({
               </View>
             )}
 
-            <View className="flex-row gap-3 mt-1">
+            <View style={{ flexDirection: 'row', gap: 12, marginTop: 4 }}>
               <Pressable
                 onPress={() => {
                   setCatalogOpen(false);
-                  setCatalogSearch("");
+                  setCatalogSearch('');
                   setCatalogSelected(null);
-                  setCatalogQty("");
+                  setCatalogQty('');
                 }}
-                className="flex-1 py-3 rounded-xl border border-zinc-300 dark:border-[#2d3133] items-center"
+                style={{
+                  flex: 1,
+                  paddingVertical: 12,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: colors.outline,
+                  alignItems: 'center',
+                }}
               >
-                <Text className="text-sm font-medium text-[#11181C] dark:text-[#ECEDEE]">
-                  {t("pricing.cancel")}
+                <Text style={{ fontSize: 14, fontWeight: '500', color: colors.onSurface }}>
+                  {t('pricing.cancel')}
                 </Text>
               </Pressable>
               <Pressable
                 onPress={addFromCatalog}
                 disabled={!catalogSelected || parseDecimal(catalogQty) <= 0}
-                className="flex-1 py-3 rounded-xl bg-primary items-center"
                 style={{
-                  opacity:
-                    !catalogSelected || parseDecimal(catalogQty) <= 0 ? 0.5 : 1,
+                  flex: 1,
+                  paddingVertical: 12,
+                  borderRadius: 12,
+                  backgroundColor: colors.primary,
+                  alignItems: 'center',
+                  opacity: !catalogSelected || parseDecimal(catalogQty) <= 0 ? 0.5 : 1,
                 }}
               >
-                <Text className="text-sm font-medium text-white">
-                  {t("pricing.confirmAdd")}
+                <Text style={{ fontSize: 14, fontWeight: '500', color: colors.onPrimary }}>
+                  {t('pricing.confirmAdd')}
                 </Text>
               </Pressable>
             </View>
@@ -263,14 +279,19 @@ export function MaterialsStep({
 
       {/* Custom material form */}
       {customOpen && (
-        <View className="rounded-xl border border-zinc-200 dark:border-[#2d3133] overflow-hidden">
+        <View
+          style={{
+            borderRadius: 12,
+            borderWidth: 1,
+            borderColor: colors.outlineVariant,
+            overflow: 'hidden',
+          }}
+        >
           <View style={{ padding: 16, gap: 12 }}>
-            <ThemedText type="defaultSemiBold">
-              {t("pricing.addCustom")}
-            </ThemedText>
+            <ThemedText type="defaultSemiBold">{t('pricing.addCustom')}</ThemedText>
 
             <Input
-              placeholder={t("pricing.customMaterialName")}
+              placeholder={t('pricing.customMaterialName')}
               value={customName}
               onChangeText={setCustomName}
               autoFocus
@@ -278,19 +299,15 @@ export function MaterialsStep({
               wrapperStyle={COMPACT_INPUT}
             />
 
-            <ThemedText className="text-xs font-semibold text-[#687076] dark:text-[#9ba1a6]">
-              {t("pricing.customUnit")}
+            <ThemedText style={{ fontSize: 12, fontWeight: '600', color: colors.onSurfaceVariant }}>
+              {t('pricing.customUnit')}
             </ThemedText>
-            <ChipSelector
-              options={MATERIAL_UNITS}
-              selected={customUnit}
-              onSelect={setCustomUnit}
-            />
+            <ChipSelector options={MATERIAL_UNITS} selected={customUnit} onSelect={setCustomUnit} />
 
-            <View className="flex-row gap-3">
-              <View className="flex-1 gap-2">
-                <ThemedText className="text-xs font-semibold text-[#687076] dark:text-[#9ba1a6]">
-                  {t("pricing.customUnitCost")}
+            <View style={{ flexDirection: 'row', gap: 12 }}>
+              <View style={{ flex: 1, gap: 8 }}>
+                <ThemedText style={{ fontSize: 12, fontWeight: '600', color: colors.onSurfaceVariant }}>
+                  {t('pricing.customUnitCost')}
                 </ThemedText>
                 <Input
                   placeholder="0,00"
@@ -300,9 +317,9 @@ export function MaterialsStep({
                   wrapperStyle={COMPACT_INPUT}
                 />
               </View>
-              <View className="flex-1 gap-2">
-                <ThemedText className="text-xs font-semibold text-[#687076] dark:text-[#9ba1a6]">
-                  {t("pricing.customQuantity")}
+              <View style={{ flex: 1, gap: 8 }}>
+                <ThemedText style={{ fontSize: 12, fontWeight: '600', color: colors.onSurfaceVariant }}>
+                  {t('pricing.customQuantity')}
                 </ThemedText>
                 <Input
                   placeholder="0"
@@ -316,62 +333,69 @@ export function MaterialsStep({
 
             <Pressable
               onPress={() => setCustomSaveToList((v) => !v)}
-              className="flex-row items-center gap-2"
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}
             >
               <View
-                className={[
-                  "w-5 h-5 rounded border items-center justify-center",
-                  customSaveToList
-                    ? "bg-primary border-primary"
-                    : "border-zinc-300 dark:border-[#2d3133]",
-                ].join(" ")}
+                style={{
+                  width: 20,
+                  height: 20,
+                  borderRadius: 4,
+                  borderWidth: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: customSaveToList ? colors.primary : 'transparent',
+                  borderColor: customSaveToList ? colors.primary : colors.outline,
+                }}
               >
                 {customSaveToList ? (
-                  <Text className="text-white text-xs font-bold leading-none">
+                  <Text style={{ color: colors.onPrimary, fontSize: 12, fontWeight: '700', lineHeight: 14 }}>
                     ✓
                   </Text>
                 ) : null}
               </View>
-              <ThemedText className="text-sm text-[#687076] dark:text-[#9ba1a6]">
-                {t("pricing.saveToList")}
+              <ThemedText style={{ fontSize: 14, color: colors.onSurfaceVariant }}>
+                {t('pricing.saveToList')}
               </ThemedText>
             </Pressable>
 
-            <View className="flex-row gap-3 mt-1">
+            <View style={{ flexDirection: 'row', gap: 12, marginTop: 4 }}>
               <Pressable
                 onPress={() => {
                   setCustomOpen(false);
-                  setCustomName("");
-                  setCustomUnit("");
-                  setCustomUnitCost("");
-                  setCustomQty("");
+                  setCustomName('');
+                  setCustomUnit('');
+                  setCustomUnitCost('');
+                  setCustomQty('');
                   setCustomSaveToList(false);
                 }}
-                className="flex-1 py-3 rounded-xl border border-zinc-300 dark:border-[#2d3133] items-center"
+                style={{
+                  flex: 1,
+                  paddingVertical: 12,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: colors.outline,
+                  alignItems: 'center',
+                }}
               >
-                <Text className="text-sm font-medium text-[#11181C] dark:text-[#ECEDEE]">
-                  {t("pricing.cancel")}
+                <Text style={{ fontSize: 14, fontWeight: '500', color: colors.onSurface }}>
+                  {t('pricing.cancel')}
                 </Text>
               </Pressable>
               <Pressable
                 onPress={addCustomMaterial}
-                disabled={
-                  !customName.trim() ||
-                  !customUnit ||
-                  parseDecimal(customQty) <= 0
-                }
-                className="flex-1 py-3 rounded-xl bg-primary items-center"
+                disabled={!customName.trim() || !customUnit || parseDecimal(customQty) <= 0}
                 style={{
+                  flex: 1,
+                  paddingVertical: 12,
+                  borderRadius: 12,
+                  backgroundColor: colors.primary,
+                  alignItems: 'center',
                   opacity:
-                    !customName.trim() ||
-                    !customUnit ||
-                    parseDecimal(customQty) <= 0
-                      ? 0.5
-                      : 1,
+                    !customName.trim() || !customUnit || parseDecimal(customQty) <= 0 ? 0.5 : 1,
                 }}
               >
-                <Text className="text-sm font-medium text-white">
-                  {t("pricing.confirmAdd")}
+                <Text style={{ fontSize: 14, fontWeight: '500', color: colors.onPrimary }}>
+                  {t('pricing.confirmAdd')}
                 </Text>
               </Pressable>
             </View>
@@ -381,38 +405,49 @@ export function MaterialsStep({
 
       {/* Add buttons */}
       {!catalogOpen && !customOpen && (
-        <View className="flex-row gap-3">
+        <View style={{ flexDirection: 'row', gap: 12 }}>
           <Pressable
             onPress={() => setCatalogOpen(true)}
-            className="flex-1 py-3 rounded-xl border border-zinc-300 dark:border-[#2d3133] items-center"
+            style={{
+              flex: 1,
+              paddingVertical: 12,
+              borderRadius: 12,
+              borderWidth: 1,
+              borderColor: colors.outline,
+              alignItems: 'center',
+            }}
           >
-            <Text className="text-sm font-medium text-[#11181C] dark:text-[#ECEDEE]">
-              {`+ ${t("pricing.addFromCatalog")}`}
+            <Text style={{ fontSize: 14, fontWeight: '500', color: colors.onSurface }}>
+              {`+ ${t('pricing.addFromCatalog')}`}
             </Text>
           </Pressable>
           <Pressable
             onPress={() => setCustomOpen(true)}
-            className="flex-1 py-3 rounded-xl border border-zinc-300 dark:border-[#2d3133] items-center"
+            style={{
+              flex: 1,
+              paddingVertical: 12,
+              borderRadius: 12,
+              borderWidth: 1,
+              borderColor: colors.outline,
+              alignItems: 'center',
+            }}
           >
-            <Text className="text-sm font-medium text-[#11181C] dark:text-[#ECEDEE]">
-              {`+ ${t("pricing.addCustom")}`}
+            <Text style={{ fontSize: 14, fontWeight: '500', color: colors.onSurface }}>
+              {`+ ${t('pricing.addCustom')}`}
             </Text>
           </Pressable>
         </View>
       )}
 
       {/* Divider */}
-      <View className="h-px bg-zinc-200 dark:bg-[#2d3133]" />
+      <View style={{ height: 1, backgroundColor: colors.outlineVariant }} />
 
       {/* Manual cost */}
-      <FormField
-        label={t("pricing.manualMaterialCost")}
-        optional={t("pricing.optional")}
-      >
+      <FormField label={t('pricing.manualMaterialCost')} optional={t('pricing.optional')}>
         <Input
           placeholder="0,00"
           value={form.manualMaterialCost}
-          onChangeText={(v) => set("manualMaterialCost", v)}
+          onChangeText={(v) => set('manualMaterialCost', v)}
           keyboardType="decimal-pad"
         />
       </FormField>

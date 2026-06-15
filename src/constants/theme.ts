@@ -1,41 +1,115 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 import { Platform } from 'react-native';
 
-const tintColorLight = '#6750A4';
-const tintColorDark = '#fff';
+export type ThemeScheme = {
+  primary: string;
+  onPrimary: string;
+  primaryContainer: string;
+  onPrimaryContainer: string;
+  secondary: string;
+  onSecondary: string;
+  secondaryContainer: string;
+  onSecondaryContainer: string;
+  background: string;
+  onBackground: string;
+  surface: string;
+  onSurface: string;
+  surfaceVariant: string;
+  onSurfaceVariant: string;
+  outline: string;
+  outlineVariant: string;
+  error: string;
+  onError: string;
+  errorContainer: string;
+  onErrorContainer: string;
+  surfaceContainerLowest: string;
+  surfaceContainerLow: string;
+  surfaceContainer: string;
+  surfaceContainerHigh: string;
+  surfaceContainerHighest: string;
+};
 
-export const Colors = {
+export const Theme: { light: ThemeScheme; dark: ThemeScheme } = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    primary: '#415F91',
+    onPrimary: '#FFFFFF',
+    primaryContainer: '#D6E3FF',
+    onPrimaryContainer: '#284777',
+    secondary: '#565F71',
+    onSecondary: '#FFFFFF',
+    secondaryContainer: '#DBE2F9',
+    onSecondaryContainer: '#3F4759',
+    background: '#F9F9FF',
+    onBackground: '#191C20',
+    surface: '#F9F9FF',
+    onSurface: '#191C20',
+    surfaceVariant: '#E0E2EC',
+    onSurfaceVariant: '#44474E',
+    outline: '#74777F',
+    outlineVariant: '#C4C6D0',
+    error: '#BA1A1A',
+    onError: '#FFFFFF',
+    errorContainer: '#FFDAD6',
+    onErrorContainer: '#93000A',
+    surfaceContainerLowest: '#FFFFFF',
+    surfaceContainerLow: '#F3F3FA',
+    surfaceContainer: '#EDEDF4',
+    surfaceContainerHigh: '#E7E8EE',
+    surfaceContainerHighest: '#E2E2E9',
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    primary: '#AAC7FF',
+    onPrimary: '#0A305F',
+    primaryContainer: '#284777',
+    onPrimaryContainer: '#D6E3FF',
+    secondary: '#BEC6DC',
+    onSecondary: '#283141',
+    secondaryContainer: '#3F4759',
+    onSecondaryContainer: '#DBE2F9',
+    background: '#111318',
+    onBackground: '#E2E2E9',
+    surface: '#111318',
+    onSurface: '#E2E2E9',
+    surfaceVariant: '#44474E',
+    onSurfaceVariant: '#C4C6D0',
+    outline: '#8E9099',
+    outlineVariant: '#44474E',
+    error: '#FFB4AB',
+    onError: '#690005',
+    errorContainer: '#93000A',
+    onErrorContainer: '#FFDAD6',
+    surfaceContainerLowest: '#0C0E13',
+    surfaceContainerLow: '#191C20',
+    surfaceContainer: '#1D2024',
+    surfaceContainerHigh: '#282A2F',
+    surfaceContainerHighest: '#33353A',
+  },
+};
+
+// Backward-compat shim — used by useThemeColor hook
+export const Colors = {
+  light: {
+    text: Theme.light.onBackground,
+    background: Theme.light.background,
+    tint: Theme.light.primary,
+    icon: Theme.light.onSurfaceVariant,
+    tabIconDefault: Theme.light.onSurfaceVariant,
+    tabIconSelected: Theme.light.primary,
+  },
+  dark: {
+    text: Theme.dark.onBackground,
+    background: Theme.dark.background,
+    tint: Theme.dark.primary,
+    icon: Theme.dark.onSurfaceVariant,
+    tabIconDefault: Theme.dark.onSurfaceVariant,
+    tabIconSelected: Theme.dark.primary,
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: 'ui-monospace',
   },
   default: {

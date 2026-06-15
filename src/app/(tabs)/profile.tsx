@@ -1,4 +1,4 @@
-import { useFocusEffect, useRouter } from "expo-router";
+﻿import { useFocusEffect, useRouter } from "expo-router";
 import {
   Camera,
   ChevronRight,
@@ -21,7 +21,7 @@ import {
 } from "react-native";
 
 import { AppHeader } from "@/components/app-header";
-import { Input } from "@/components/ui/Input";
+import { Input } from '@/components/ui/input';
 import { ThemedView } from "@/components/themed-view";
 import { COLORS } from "@/constants/design";
 import { useProfile } from "@/hooks/use-profile";

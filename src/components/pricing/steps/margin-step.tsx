@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
-import { Input } from '@/components/ui/Input';
 import { ThemedText } from '@/components/themed-text';
+import { Input } from '@/components/ui/input';
+import { useColors } from '@/hooks/use-colors';
 import { ErrorField, FormState } from '@/types/pricing-form';
 import { FormField } from '../form-helpers';
 
@@ -16,6 +17,7 @@ type Props = {
 
 export function MarginStep({ form, set, errors, profitPct, totalFeesPercent }: Props) {
   const { t } = useTranslation();
+  const colors = useColors();
 
   const hasMarginError = errors.has('margin') || (profitPct > 0 && profitPct + totalFeesPercent >= 100);
 
@@ -26,20 +28,27 @@ export function MarginStep({ form, set, errors, profitPct, totalFeesPercent }: P
         <ThemedText type="defaultSemiBold" style={{ fontSize: 18 }}>
           {t('pricing.sectionProfit')}
         </ThemedText>
-        <ThemedText className="text-sm text-[#687076] dark:text-[#9ba1a6]">
+        <ThemedText style={{ fontSize: 14, color: colors.onSurfaceVariant }}>
           {t('pricing.stepMarginDesc')}
         </ThemedText>
       </View>
 
-      {/* Summary of fees (context for the user) */}
+      {/* Summary of fees */}
       {totalFeesPercent > 0 && (
-        <View className="rounded-xl px-4 py-3 bg-zinc-50 dark:bg-[#1e2122] border border-zinc-200 dark:border-[#2d3133]">
-          <ThemedText className="text-xs text-[#687076] dark:text-[#9ba1a6] mb-0.5">
+        <View
+          style={{
+            borderRadius: 12,
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+            backgroundColor: colors.surfaceContainerLow,
+            borderWidth: 1,
+            borderColor: colors.outlineVariant,
+          }}
+        >
+          <ThemedText style={{ fontSize: 12, color: colors.onSurfaceVariant, marginBottom: 2 }}>
             {t('pricing.totalFees')}
           </ThemedText>
-          <ThemedText type="defaultSemiBold" className="text-base">
-            {`${totalFeesPercent.toFixed(1)}%`}
-          </ThemedText>
+          <ThemedText type="defaultSemiBold">{`${totalFeesPercent.toFixed(1)}%`}</ThemedText>
         </View>
       )}
 
@@ -55,17 +64,17 @@ export function MarginStep({ form, set, errors, profitPct, totalFeesPercent }: P
           value={form.desiredProfitPercent}
           onChangeText={(v) => set('desiredProfitPercent', v)}
           keyboardType="decimal-pad"
-          wrapperStyle={hasMarginError ? { borderColor: '#E5484D', borderWidth: 1.5 } : undefined}
+          wrapperStyle={hasMarginError ? { borderColor: colors.error, borderWidth: 1.5 } : undefined}
         />
       </FormField>
 
       {/* OR divider */}
-      <View className="flex-row items-center gap-3">
-        <View className="flex-1 h-px bg-zinc-200 dark:bg-[#2d3133]" />
-        <ThemedText className="text-xs text-[#687076] dark:text-[#9ba1a6]">
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ flex: 1, height: 1, backgroundColor: colors.outlineVariant }} />
+        <ThemedText style={{ fontSize: 12, color: colors.onSurfaceVariant }}>
           {t('pricing.orLabel')}
         </ThemedText>
-        <View className="flex-1 h-px bg-zinc-200 dark:bg-[#2d3133]" />
+        <View style={{ flex: 1, height: 1, backgroundColor: colors.outlineVariant }} />
       </View>
 
       {/* Profit value */}
@@ -80,7 +89,7 @@ export function MarginStep({ form, set, errors, profitPct, totalFeesPercent }: P
         />
       </FormField>
 
-      <ThemedText className="text-xs text-[#687076] dark:text-[#9ba1a6] leading-5">
+      <ThemedText style={{ fontSize: 12, color: colors.onSurfaceVariant, lineHeight: 20 }}>
         {profitPct > 0
           ? `Margem de lucro: ${profitPct.toFixed(1)}% sobre o preço final`
           : 'Deixe em branco para definir apenas o preço final na próxima etapa.'}

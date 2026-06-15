@@ -1,4 +1,4 @@
-import { useFocusEffect, useRouter } from 'expo-router';
+﻿import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, ActivityIndicator, FlatList, Pressable, View } from 'react-native';
@@ -9,7 +9,7 @@ import { MaterialCard } from '@/components/material-card';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Input } from '@/components/ui/Input';
+import { Input } from '@/components/ui/input';
 import { deleteMaterial } from '@/data/material-storage';
 import { useMaterials } from '@/hooks/use-materials';
 import { useThemeColor } from '@/hooks/use-theme-color';

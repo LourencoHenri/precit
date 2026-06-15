@@ -7,11 +7,12 @@ import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { COLORS } from '@/constants/design';
+import { useColors } from '@/hooks/use-colors';
 
 export default function PricingScreen() {
   const { t } = useTranslation();
   const router = useRouter();
+  const colors = useColors();
 
   const benefits = [
     t('pricing.benefit1'),
@@ -20,7 +21,7 @@ export default function PricingScreen() {
   ];
 
   return (
-    <ThemedView className="flex-1">
+    <ThemedView style={{ flex: 1 }}>
       <AppHeader title={t('nav.pricing')} />
 
       <View
@@ -34,7 +35,7 @@ export default function PricingScreen() {
       >
         <View
           style={{
-            backgroundColor: COLORS.primaryContainer,
+            backgroundColor: colors.primaryContainer,
             borderRadius: 28,
             width: 112,
             height: 112,
@@ -42,14 +43,14 @@ export default function PricingScreen() {
             justifyContent: 'center',
           }}
         >
-          <IconSymbol name="tag" size={52} color={COLORS.primary} />
+          <IconSymbol name="tag" size={52} color={colors.primary} />
         </View>
 
         <View style={{ alignItems: 'center', gap: 8 }}>
-          <ThemedText type="title" className="text-center">
+          <ThemedText type="title" style={{ textAlign: 'center' }}>
             {t('pricing.title')}
           </ThemedText>
-          <ThemedText className="text-center opacity-60 leading-[22px]">
+          <ThemedText style={{ textAlign: 'center', opacity: 0.6, lineHeight: 22 }}>
             {t('pricing.subtitle')}
           </ThemedText>
         </View>
@@ -65,13 +66,13 @@ export default function PricingScreen() {
                   width: 26,
                   height: 26,
                   borderRadius: 13,
-                  backgroundColor: COLORS.primaryContainer,
+                  backgroundColor: colors.primaryContainer,
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0,
                 }}
               >
-                <Check size={14} color={COLORS.primary} strokeWidth={2.5} />
+                <Check size={14} color={colors.primary} strokeWidth={2.5} />
               </View>
               <ThemedText style={{ fontSize: 15, flex: 1 }}>{benefit}</ThemedText>
             </View>
@@ -81,7 +82,7 @@ export default function PricingScreen() {
         <Pressable
           onPress={() => router.push('/new-product')}
           style={{
-            backgroundColor: COLORS.primary,
+            backgroundColor: colors.primary,
             borderRadius: 14,
             paddingHorizontal: 32,
             paddingVertical: 16,
@@ -89,7 +90,7 @@ export default function PricingScreen() {
             width: '100%',
           }}
         >
-          <Text style={{ color: 'white', fontWeight: '600', fontSize: 16, letterSpacing: 0.3 }}>
+          <Text style={{ color: colors.onPrimary, fontWeight: '600', fontSize: 16, letterSpacing: 0.3 }}>
             {t('pricing.newProduct')}
           </Text>
         </Pressable>

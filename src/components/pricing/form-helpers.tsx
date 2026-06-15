@@ -1,6 +1,7 @@
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
+import { useColors } from '@/hooks/use-colors';
 
 type FormFieldProps = {
   label: string;
@@ -12,23 +13,24 @@ type FormFieldProps = {
 };
 
 export function FormField({ label, required, optional, error, errorText, children }: FormFieldProps) {
+  const colors = useColors();
   return (
-    <View className="gap-2">
-      <View className="flex-row items-center gap-1.5">
-        <ThemedText className="text-sm font-semibold text-[#687076] dark:text-[#9ba1a6]">
+    <View style={{ gap: 8 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        <ThemedText style={{ fontSize: 14, fontWeight: '600', color: colors.onSurfaceVariant }}>
           {label}
         </ThemedText>
         {required ? (
-          <Text className="text-sm text-red-500">*</Text>
+          <Text style={{ fontSize: 14, color: colors.error }}>*</Text>
         ) : optional ? (
-          <ThemedText className="text-xs text-[#687076] dark:text-[#9ba1a6] opacity-60">
+          <ThemedText style={{ fontSize: 12, color: colors.onSurfaceVariant, opacity: 0.6 }}>
             ({optional})
           </ThemedText>
         ) : null}
       </View>
       {children}
       {error && errorText ? (
-        <ThemedText className="text-xs text-red-500">{errorText}</ThemedText>
+        <ThemedText style={{ fontSize: 12, color: colors.error }}>{errorText}</ThemedText>
       ) : null}
     </View>
   );
@@ -42,6 +44,7 @@ type ChipSelectorProps = {
 };
 
 export function ChipSelector({ options, selected, onSelect, hasError }: ChipSelectorProps) {
+  const colors = useColors();
   return (
     <ScrollView
       horizontal
@@ -54,21 +57,21 @@ export function ChipSelector({ options, selected, onSelect, hasError }: ChipSele
           <Pressable
             key={opt}
             onPress={() => onSelect(isSelected ? '' : opt)}
-            className={[
-              'px-3 py-1.5 rounded-full border',
-              isSelected
-                ? 'bg-primary border-primary'
-                : hasError
-                  ? 'border-red-400 dark:border-red-500'
-                  : 'border-zinc-300 dark:border-[#2d3133]',
-            ].join(' ')}
+            style={{
+              paddingHorizontal: 12,
+              paddingVertical: 6,
+              borderRadius: 9999,
+              borderWidth: 1,
+              backgroundColor: isSelected ? colors.primary : 'transparent',
+              borderColor: isSelected ? colors.primary : hasError ? colors.error : colors.outline,
+            }}
           >
             <Text
-              className={
-                isSelected
-                  ? 'text-white text-sm font-medium'
-                  : 'text-sm text-[#11181C] dark:text-[#ECEDEE]'
-              }
+              style={{
+                fontSize: 14,
+                fontWeight: '500',
+                color: isSelected ? colors.onPrimary : colors.onSurface,
+              }}
             >
               {opt}
             </Text>
@@ -80,12 +83,13 @@ export function ChipSelector({ options, selected, onSelect, hasError }: ChipSele
 }
 
 export function SectionHeader({ title }: { title: string }) {
+  const colors = useColors();
   return (
-    <View className="flex-row items-center gap-3">
-      <ThemedText type="defaultSemiBold" className="text-sm">
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+      <ThemedText type="defaultSemiBold" style={{ fontSize: 14 }}>
         {title}
       </ThemedText>
-      <View className="flex-1 h-px bg-zinc-200 dark:bg-[#2d3133]" />
+      <View style={{ flex: 1, height: 1, backgroundColor: colors.outlineVariant }} />
     </View>
   );
 }

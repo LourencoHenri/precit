@@ -1,8 +1,8 @@
-import { Pressable, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { COLORS } from '@/constants/design';
+import { useColors } from '@/hooks/use-colors';
 import { Material } from '@/types/material';
 
 type Props = {
@@ -17,37 +17,43 @@ function formatPrice(value: number): string {
 }
 
 export function MaterialCard({ material, unitCostLabel, stockLabel, onOptions }: Props) {
+  const colors = useColors();
   return (
-    <View className="bg-white dark:bg-[#1e2122] border border-zinc-200 dark:border-[#2d3133] rounded-xl mx-4 my-1.5 p-4 gap-2">
-      <View className="flex-row items-center gap-2">
-        <ThemedText type="defaultSemiBold" className="flex-1" numberOfLines={1}>
+    <View
+      style={[
+        styles.card,
+        { backgroundColor: colors.surfaceContainerLow, borderColor: colors.outlineVariant },
+      ]}
+    >
+      <View style={styles.header}>
+        <ThemedText type="defaultSemiBold" style={{ flex: 1 }} numberOfLines={1}>
           {material.name}
         </ThemedText>
         {material.category ? (
-          <View className="bg-zinc-100 dark:bg-[#2d3133] rounded-full px-2.5 py-0.5">
-            <ThemedText className="text-xs text-[#687076] dark:text-[#9ba1a6]">
+          <View style={[styles.badge, { backgroundColor: colors.surfaceContainerHigh }]}>
+            <ThemedText style={{ fontSize: 12, color: colors.onSurfaceVariant }}>
               {material.category}
             </ThemedText>
           </View>
         ) : null}
         {onOptions ? (
           <Pressable onPress={() => onOptions(material)} hitSlop={8}>
-            <IconSymbol name="more-vertical" size={20} color={COLORS.onSurfaceVariant} />
+            <IconSymbol name="more-vertical" size={20} color={colors.onSurfaceVariant} />
           </Pressable>
         ) : null}
       </View>
 
-      <View className="gap-0.5">
-        <ThemedText className="text-[13px] text-primary dark:text-primary">
+      <View style={{ gap: 2 }}>
+        <ThemedText style={{ fontSize: 13, color: colors.primary }}>
           {`${unitCostLabel}: ${formatPrice(material.unitCost)} / ${material.purchaseUnit}`}
         </ThemedText>
         {material.currentStock !== undefined ? (
-          <ThemedText className="text-[13px] text-[#687076] dark:text-[#9ba1a6]">
+          <ThemedText style={{ fontSize: 13, color: colors.onSurfaceVariant }}>
             {`${stockLabel}: ${material.currentStock} ${material.purchaseUnit}`}
           </ThemedText>
         ) : null}
         {material.supplier ? (
-          <ThemedText className="text-[13px] text-[#687076] dark:text-[#9ba1a6]">
+          <ThemedText style={{ fontSize: 13, color: colors.onSurfaceVariant }}>
             {material.supplier}
           </ThemedText>
         ) : null}
@@ -55,3 +61,24 @@ export function MaterialCard({ material, unitCostLabel, stockLabel, onOptions }:
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  card: {
+    borderWidth: 1,
+    borderRadius: 12,
+    marginHorizontal: 16,
+    marginVertical: 6,
+    padding: 16,
+    gap: 8,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  badge: {
+    borderRadius: 9999,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+  },
+});

@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, Text, TextInput, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
+import { useColors } from '@/hooks/use-colors';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import { COLORS } from '@/constants/design';
 import { FormState } from '@/types/pricing-form';
 import { ProductMaterial } from '@/types/product';
 import { fmt } from '@/utils/format';
@@ -40,10 +40,12 @@ export function ReviewStep({
   setFinalPriceManual,
 }: Props) {
   const { t } = useTranslation();
-  const finalPriceCardBg = useThemeColor({ light: '#F3EFF9', dark: '#1E1A2B' }, 'background');
-  const finalPriceColor = useThemeColor({ light: COLORS.primary, dark: '#D0BCFF' }, 'text');
-  const finalPriceDivider = useThemeColor({ light: '#E8DEF8', dark: '#2D2440' }, 'background');
-  const finalPricePlaceholder = useThemeColor({ light: '#C4B5E0', dark: '#6B5E8C' }, 'icon');
+  const colors = useColors();
+
+  const finalPriceCardBg = useThemeColor({ light: '#D6E3FF', dark: '#1A2D4A' }, 'background');
+  const finalPriceColor = useThemeColor({ light: '#415F91', dark: '#AAC7FF' }, 'text');
+  const finalPriceDivider = useThemeColor({ light: '#A8C1F0', dark: '#2D4A6D' }, 'background');
+  const finalPricePlaceholder = useThemeColor({ light: '#7A9ECF', dark: '#4E6E99' }, 'icon');
 
   const summaryRows = [
     { label: t('pricing.totalMaterialCostLabel'), value: fmt(totalMaterialCost) },
@@ -61,26 +63,33 @@ export function ReviewStep({
         <ThemedText type="defaultSemiBold" style={{ fontSize: 18 }}>
           {t('pricing.sectionSummary')}
         </ThemedText>
-        <ThemedText className="text-sm text-[#687076] dark:text-[#9ba1a6]">
+        <ThemedText style={{ fontSize: 14, color: colors.onSurfaceVariant }}>
           {t('pricing.stepReviewDesc')}
         </ThemedText>
       </View>
 
       {/* Product info recap */}
       <View
-        className="rounded-xl px-4 py-3 bg-zinc-50 dark:bg-[#1e2122] border border-zinc-200 dark:border-[#2d3133]"
-        style={{ gap: 4 }}
+        style={{
+          borderRadius: 12,
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          backgroundColor: colors.surfaceContainerLow,
+          borderWidth: 1,
+          borderColor: colors.outlineVariant,
+          gap: 4,
+        }}
       >
         <ThemedText type="defaultSemiBold" style={{ fontSize: 16 }} numberOfLines={2}>
           {form.name}
         </ThemedText>
         {!!form.category && (
-          <ThemedText className="text-xs text-[#687076] dark:text-[#9ba1a6]">
+          <ThemedText style={{ fontSize: 12, color: colors.onSurfaceVariant }}>
             {form.category}
           </ThemedText>
         )}
         {!!form.description && (
-          <ThemedText className="text-sm text-[#49454F] dark:text-[#9ba1a6]" numberOfLines={2}>
+          <ThemedText style={{ fontSize: 14, color: colors.onSurfaceVariant }} numberOfLines={2}>
             {form.description}
           </ThemedText>
         )}
@@ -89,37 +98,75 @@ export function ReviewStep({
       {/* Materials used (compact) */}
       {productMaterials.length > 0 && (
         <View style={{ gap: 8 }}>
-          <ThemedText className="text-xs font-semibold text-[#687076] dark:text-[#9ba1a6] uppercase tracking-wide">
+          <ThemedText
+            style={{
+              fontSize: 12,
+              fontWeight: '600',
+              color: colors.onSurfaceVariant,
+              textTransform: 'uppercase',
+              letterSpacing: 0.8,
+            }}
+          >
             {t('pricing.sectionMaterials')}
           </ThemedText>
           {productMaterials.map((m) => (
             <View
               key={m.id}
-              className="flex-row justify-between items-center py-2 border-b border-zinc-100 dark:border-[#2d3133]"
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingVertical: 8,
+                borderBottomWidth: 1,
+                borderBottomColor: colors.outlineVariant,
+              }}
             >
-              <ThemedText className="text-sm flex-1 mr-2" numberOfLines={1}>
+              <ThemedText style={{ fontSize: 14, flex: 1, marginRight: 8 }} numberOfLines={1}>
                 {m.name}
               </ThemedText>
-              <ThemedText className="text-sm font-semibold">{fmt(m.totalCost)}</ThemedText>
+              <ThemedText style={{ fontSize: 14, fontWeight: '600' }}>{fmt(m.totalCost)}</ThemedText>
             </View>
           ))}
         </View>
       )}
 
       {/* Cost summary table */}
-      <View className="rounded-xl border border-zinc-200 dark:border-[#2d3133] overflow-hidden">
+      <View
+        style={{
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: colors.outlineVariant,
+          overflow: 'hidden',
+        }}
+      >
         {summaryRows.map(({ label, value, bold, accent }, index) => (
           <View
             key={label}
-            className={`flex-row justify-between items-center px-4 py-3${index > 0 ? ' border-t border-zinc-100 dark:border-[#2d3133]' : ''}`}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+              borderTopWidth: index > 0 ? 1 : 0,
+              borderTopColor: colors.outlineVariant,
+            }}
           >
             <ThemedText
-              className={`text-sm text-[#687076] dark:text-[#9ba1a6]${bold ? ' font-semibold' : ''}`}
+              style={{
+                fontSize: 14,
+                color: colors.onSurfaceVariant,
+                fontWeight: bold ? '600' : '400',
+              }}
             >
               {label}
             </ThemedText>
             <ThemedText
-              className={`text-sm font-semibold${accent ? ' text-primary dark:text-primary' : ''}`}
+              style={{
+                fontSize: 14,
+                fontWeight: '600',
+                color: accent ? colors.primary : colors.onSurface,
+              }}
             >
               {value}
             </ThemedText>
@@ -187,7 +234,7 @@ export function ReviewStep({
               gap: 4,
             }}
           >
-            <Text style={{ fontSize: 11, color: COLORS.textSecondary, letterSpacing: 0.3 }}>
+            <Text style={{ fontSize: 11, color: colors.onSurfaceVariant, letterSpacing: 0.3 }}>
               {t('pricing.estimatedProfit')}
             </Text>
             <Text
@@ -201,7 +248,7 @@ export function ReviewStep({
             </Text>
           </View>
           <View style={{ flex: 1, alignItems: 'center', paddingVertical: 14, gap: 4 }}>
-            <Text style={{ fontSize: 11, color: COLORS.textSecondary, letterSpacing: 0.3 }}>
+            <Text style={{ fontSize: 11, color: colors.onSurfaceVariant, letterSpacing: 0.3 }}>
               {t('pricing.realMargin')}
             </Text>
             <Text

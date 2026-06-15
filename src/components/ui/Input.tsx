@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   StyleProp,
   StyleSheet,
@@ -7,9 +7,9 @@ import {
   TextInputProps,
   View,
   ViewStyle,
-} from "react-native";
+} from 'react-native';
 
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { useThemeColor } from '@/hooks/use-theme-color';
 
 type AppInputProps = TextInputProps & {
   label?: string;
@@ -19,36 +19,20 @@ type AppInputProps = TextInputProps & {
   wrapperStyle?: StyleProp<ViewStyle>;
 };
 
-export function Input({
-  label,
-  error,
-  leftIcon,
-  rightIcon,
-  style,
-  wrapperStyle,
-  ...props
-}: AppInputProps) {
+export function Input({ label, error, leftIcon, rightIcon, style, wrapperStyle, ...props }: AppInputProps) {
   const hasLeft = !!leftIcon;
   const hasRight = !!rightIcon;
   const isMultiline = !!props.multiline;
 
-  const bg = useThemeColor({ light: "#f3f4f6", dark: "#2d3133" }, "background");
-  const textColor = useThemeColor({}, "text");
-  const borderColor = useThemeColor(
-    { light: "#E2E8F0", dark: "#3f4446" },
-    "background",
-  );
-  const labelColor = useThemeColor({}, "text");
-  const placeholderColor = useThemeColor(
-    { light: "#9ca3af", dark: "#6b7280" },
-    "icon",
-  );
+  const bg = useThemeColor({ light: '#F3F3FA', dark: '#1D2024' }, 'background');
+  const textColor = useThemeColor({}, 'text');
+  const borderColor = useThemeColor({ light: '#C4C6D0', dark: '#44474E' }, 'background');
+  const labelColor = useThemeColor({}, 'text');
+  const placeholderColor = useThemeColor({ light: '#74777F', dark: '#8E9099' }, 'icon');
 
   return (
     <View style={styles.container}>
-      {label && (
-        <Text style={[styles.label, { color: labelColor }]}>{label}</Text>
-      )}
+      {label && <Text style={[styles.label, { color: labelColor }]}>{label}</Text>}
 
       <View
         style={[
@@ -84,17 +68,17 @@ export function Input({
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: '100%',
     gap: 6,
   },
   label: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   inputWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
     height: 48,
     borderWidth: 1,
     borderRadius: 16,
@@ -102,22 +86,22 @@ const styles = StyleSheet.create({
   inputWrapperMultiline: {
     height: undefined,
     minHeight: 80,
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
     paddingVertical: 10,
   },
   inputWrapperError: {
-    borderColor: "#E5484D",
+    borderColor: '#BA1A1A',
     borderWidth: 1.5,
   },
   input: {
     flex: 1,
-    height: "100%",
+    height: '100%',
     paddingHorizontal: 16,
     fontSize: 16,
   },
   inputMultiline: {
     height: undefined,
-    textAlignVertical: "top",
+    textAlignVertical: 'top',
   },
   inputWithLeft: {
     paddingLeft: 4,
@@ -127,16 +111,16 @@ const styles = StyleSheet.create({
   },
   iconLeft: {
     paddingLeft: 12,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   iconRight: {
     paddingRight: 12,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   error: {
     fontSize: 12,
-    color: "#E5484D",
+    color: '#BA1A1A',
   },
 });

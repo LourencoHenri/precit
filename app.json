@@ -29,6 +29,14 @@
     "plugins": [
       "expo-router",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "O app precisa de acesso às fotos para adicionar imagens aos produtos.",
+          "cameraPermission": "O app precisa de acesso à câmera para tirar fotos dos produtos.",
+          "microphonePermission": false
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",

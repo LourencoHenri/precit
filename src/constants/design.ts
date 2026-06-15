@@ -1,15 +1,24 @@
-// Brand palette — single source of truth for UI color constants.
-// Import COLORS here instead of repeating inline hex strings across files.
+import { Theme } from '@/constants/theme';
+
+// Static light-mode color constants — single source of truth for UI colors.
+// For theme-reactive colors (dark mode), use useColors() from '@/hooks/use-colors'.
 export const COLORS = {
-  primary: '#6750A4',
-  primaryContainer: '#EADDFF',
-  surface: '#FEF7FF',
-  surfaceVariant: '#F7F2FA',
-  outlineVariant: '#EDE8F5',
-  outline: '#CAC4D0',
-  onSurface: '#1D1B20',
-  onSurfaceVariant: '#49454F',
-  textSecondary: '#79747E',
-  doneLine: '#9D86C4',
-  pillActive: '#E8DEF8',
+  primary: Theme.light.primary,
+  onPrimary: Theme.light.onPrimary,
+  primaryContainer: Theme.light.primaryContainer,
+  onPrimaryContainer: Theme.light.onPrimaryContainer,
+  secondary: Theme.light.secondary,
+  surface: Theme.light.surface,
+  surfaceVariant: Theme.light.surfaceVariant,
+  surfaceContainer: Theme.light.surfaceContainer,
+  surfaceContainerLow: Theme.light.surfaceContainerLow,
+  onSurface: Theme.light.onSurface,
+  onSurfaceVariant: Theme.light.onSurfaceVariant,
+  outline: Theme.light.outline,
+  outlineVariant: Theme.light.outlineVariant,
+  error: Theme.light.error,
+  errorContainer: Theme.light.errorContainer,
+  textSecondary: Theme.light.onSurfaceVariant,
+  doneLine: Theme.light.primary,
+  pillActive: Theme.light.primaryContainer,
 } as const;

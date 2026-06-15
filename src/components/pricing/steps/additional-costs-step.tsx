@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
-import { Input } from '@/components/ui/Input';
 import { ThemedText } from '@/components/themed-text';
+import { Input } from '@/components/ui/input';
+import { useColors } from '@/hooks/use-colors';
 import { FormState } from '@/types/pricing-form';
 import { fmt } from '@/utils/format';
 import { FormField, SectionHeader } from '../form-helpers';
@@ -15,6 +16,7 @@ type Props = {
 
 export function AdditionalCostsStep({ form, set, laborCost }: Props) {
   const { t } = useTranslation();
+  const colors = useColors();
 
   return (
     <View style={{ gap: 20 }}>
@@ -23,7 +25,7 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
         <ThemedText type="defaultSemiBold" style={{ fontSize: 18 }}>
           {t('pricing.sectionAdditional')}
         </ThemedText>
-        <ThemedText className="text-sm text-[#687076] dark:text-[#9ba1a6]">
+        <ThemedText style={{ fontSize: 14, color: colors.onSurfaceVariant }}>
           {t('pricing.stepCostsDesc')}
         </ThemedText>
       </View>
@@ -31,8 +33,8 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
       {/* Labor */}
       <SectionHeader title={t('pricing.sectionLabor')} />
 
-      <View className="flex-row gap-3">
-        <View className="flex-1">
+      <View style={{ flexDirection: 'row', gap: 12 }}>
+        <View style={{ flex: 1 }}>
           <FormField label={t('pricing.laborHours')} optional={t('pricing.optional')}>
             <Input
               placeholder="0"
@@ -42,7 +44,7 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
             />
           </FormField>
         </View>
-        <View className="flex-1">
+        <View style={{ flex: 1 }}>
           <FormField label={t('pricing.laborMinutes')} optional={t('pricing.optional')}>
             <Input
               placeholder="0"
@@ -64,18 +66,27 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
       </FormField>
 
       {laborCost > 0 && (
-        <View className="rounded-xl px-4 py-3 border border-primary bg-zinc-50 dark:bg-[#1e2122]">
-          <ThemedText className="text-xs text-[#687076] dark:text-[#9ba1a6] mb-1">
+        <View
+          style={{
+            borderRadius: 12,
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+            borderWidth: 1,
+            borderColor: colors.primary,
+            backgroundColor: colors.surfaceContainerLow,
+          }}
+        >
+          <ThemedText style={{ fontSize: 12, color: colors.onSurfaceVariant, marginBottom: 4 }}>
             {t('pricing.laborCostLabel')}
           </ThemedText>
-          <ThemedText type="defaultSemiBold" className="text-lg text-primary dark:text-primary">
+          <ThemedText type="defaultSemiBold" style={{ fontSize: 18, color: colors.primary }}>
             {fmt(laborCost)}
           </ThemedText>
         </View>
       )}
 
       {/* Additional costs */}
-      <View className="h-px bg-zinc-200 dark:bg-[#2d3133]" />
+      <View style={{ height: 1, backgroundColor: colors.outlineVariant }} />
       <SectionHeader title={t('pricing.sectionAdditional')} />
 
       <FormField label={t('pricing.packagingCost')} optional={t('pricing.optional')}>
@@ -106,7 +117,7 @@ export function AdditionalCostsStep({ form, set, laborCost }: Props) {
       </FormField>
 
       {/* Fees */}
-      <View className="h-px bg-zinc-200 dark:bg-[#2d3133]" />
+      <View style={{ height: 1, backgroundColor: colors.outlineVariant }} />
       <SectionHeader title={t('pricing.sectionFees')} />
 
       <FormField label={t('pricing.cardFeePercent')} optional={t('pricing.optional')}>
